@@ -106,9 +106,5 @@ jobs:
             ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version}}
             ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version_short}}
             ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4
-            docker.io/${{steps.script.outputs.docker_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version}}
-            docker.io/${{steps.script.outputs.docker_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version_short}}
             docker.io/${{steps.script.outputs.docker_repo}}:pgadmin4
-            quay.io/${{steps.script.outputs.redhat_quay_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version}}
-            quay.io/${{steps.script.outputs.redhat_quay_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version_short}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:pgadmin4
