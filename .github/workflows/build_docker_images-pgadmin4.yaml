@@ -1,0 +1,114 @@
+name: 'build docker images: pgadmin4'
+
+on:
+  #push:
+  #  branches:
+  #    - 'main'
+  #    - 'master'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 6 28 * *'  # At 06:30 on day-of-month 28.
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Shell-Script
+        id: script
+        run: |
+          BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          BUILD_DATE_NUMERIC="${BUILD_DATE//[^[:digit:]]/}"
+          COMMIT_HASH=${GITHUB_SHA::8}
+          GITHUB_REPO=${GITHUB_REPOSITORY,,}
+          GITHUB_REPO_SHORT=${GITHUB_REPO#*/}
+          DOCKER_REPO=${{ secrets.DOCKER_USERNAME }}/${GITHUB_REPO_SHORT}
+          REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
+          
+          #PGADMIN_VERSION_TAG=$(curl -s https://api.github.com/repos/postgres/pgadmin4/tags | grep 'name' | cut -d\" -f4 | head -n 1)
+          PGADMIN_VERSION_TAG="REL-6_2"
+          git clone --branch ${PGADMIN_VERSION_TAG} --single-branch https://github.com/postgres/pgadmin4.git ./pgadmin4
+          # fix yarn timeout: https://github.com/yarnpkg/yarn/issues/4890#issuecomment-348479446
+          echo "network-timeout 1000000" >> ./pgadmin4/web/.yarnrc
+          # workaround cryptography: https://stackoverflow.com/questions/66118337/how-to-get-rid-of-cryptography-build-error/68472128#68472128
+          sed -i "s/cryptography.*/cryptography==3.4.*/" ./pgadmin4/requirements.txt
+          sed -i '/^COPY requirements.txt /a ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1' ./pgadmin4/Dockerfile
+          # workaround pynacl: https://github.com/pyca/pynacl/issues/553#issuecomment-921564148 + https://pynacl.readthedocs.io/en/latest/install/#linux-source-build
+          sed -i '/rust \\/a \ \ \ \ \ \ \ \ libsodium-dev \\' ./pgadmin4/Dockerfile
+          sed -i '/python3 -m venv /a \ \ \ \ SODIUM_INSTALL=system /venv/bin/python3 -m pip install --no-cache-dir pynacl && \\' ./pgadmin4/Dockerfile
+          # fix for Version=<REL-6_2: ImportError: Error loading shared library libldap.so.2: No such file or directory (needed by /usr/lib/libpq.so.5)
+          sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libldap \\' ./pgadmin4/Dockerfile
+          sed -i '/libcap && \\/a \ \ \ \ ln -s /usr/lib/libldap-2.4.so.2 /usr/lib/libldap.so.2 && \\' ./pgadmin4/Dockerfile
+          # fix: ImportError: Error loading shared library libsodium.so.23: No such file or directory (needed by /venv/lib/python3.9/site-packages/nacl/_sodium.abi3.so)
+          sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libsodium \\' ./pgadmin4/Dockerfile
+
+          PGADMIN_VERSION=$(echo $PGADMIN_VERSION_TAG | sed 's/REL-//' | sed 's/_/./')
+          PGADMIN_VERSION_SHORT=${PGADMIN_VERSION%.*}
+          
+          # Set output parameters to github action.
+          echo ::set-output name=build_date::${BUILD_DATE}
+          echo ::set-output name=build_date_numeric::${BUILD_DATE_NUMERIC}
+          echo ::set-output name=commit_hash::${COMMIT_HASH}
+          echo ::set-output name=pgadmin_version::${PGADMIN_VERSION}
+          echo ::set-output name=pgadmin_version_short::${PGADMIN_VERSION_SHORT}
+          echo ::set-output name=github_repo::${GITHUB_REPO}
+          echo ::set-output name=docker_repo::${DOCKER_REPO}
+          echo ::set-output name=redhat_quay_repo::${REDHAT_QUAY_REPO}
+
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@master
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub 
+        uses: docker/login-action@v1
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Login to RED HAT Quay.io Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: quay.io
+          username: ${{ secrets.REDHAT_QUAY_USERNAME }}
+          password: ${{ secrets.REDHAT_QUAY_PASSWORD }}
+
+      - name: Build
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ./pgadmin4
+          file: ./pgadmin4/Dockerfile
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7
+          pull: true
+          push: true
+          tags: |
+            ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version}}
+            ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version_short}}
+            ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4
+            docker.io/${{steps.script.outputs.docker_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version}}
+            docker.io/${{steps.script.outputs.docker_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version_short}}
+            docker.io/${{steps.script.outputs.docker_repo}}:pgadmin4
+            quay.io/${{steps.script.outputs.redhat_quay_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version}}
+            quay.io/${{steps.script.outputs.redhat_quay_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version_short}}
+            quay.io/${{steps.script.outputs.redhat_quay_repo}}:pgadmin4
