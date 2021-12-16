@@ -32,7 +32,7 @@ jobs:
           REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
           
           #PGADMIN_VERSION_TAG=$(curl -s https://api.github.com/repos/postgres/pgadmin4/tags | grep 'name' | cut -d\" -f4 | head -n 1)
-          PGADMIN_VERSION_TAG="REL-6_2"
+          PGADMIN_VERSION_TAG="REL-6_3"
           git clone --branch ${PGADMIN_VERSION_TAG} --single-branch https://github.com/postgres/pgadmin4.git ./pgadmin4
           # fix yarn timeout: https://github.com/yarnpkg/yarn/issues/4890#issuecomment-348479446
           echo "network-timeout 1000000" >> ./pgadmin4/web/.yarnrc
@@ -42,9 +42,9 @@ jobs:
           # workaround pynacl: https://github.com/pyca/pynacl/issues/553#issuecomment-921564148 + https://pynacl.readthedocs.io/en/latest/install/#linux-source-build
           sed -i '/rust \\/a \ \ \ \ \ \ \ \ libsodium-dev \\' ./pgadmin4/Dockerfile
           sed -i '/python3 -m venv /a \ \ \ \ SODIUM_INSTALL=system /venv/bin/python3 -m pip install --no-cache-dir pynacl && \\' ./pgadmin4/Dockerfile
-          # fix for Version=<REL-6_2: ImportError: Error loading shared library libldap.so.2: No such file or directory (needed by /usr/lib/libpq.so.5)
-          sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libldap \\' ./pgadmin4/Dockerfile
-          sed -i '/libcap && \\/a \ \ \ \ ln -s /usr/lib/libldap-2.4.so.2 /usr/lib/libldap.so.2 && \\' ./pgadmin4/Dockerfile
+          # fix for Version=<REL-6_2 and Alpine 3.14: ImportError: Error loading shared library libldap.so.2: No such file or directory (needed by /usr/lib/libpq.so.5)
+          #sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libldap \\' ./pgadmin4/Dockerfile
+          #sed -i '/libcap && \\/a \ \ \ \ ln -s /usr/lib/libldap-2.4.so.2 /usr/lib/libldap.so.2 && \\' ./pgadmin4/Dockerfile
           # fix: ImportError: Error loading shared library libsodium.so.23: No such file or directory (needed by /venv/lib/python3.9/site-packages/nacl/_sodium.abi3.so)
           sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libsodium \\' ./pgadmin4/Dockerfile
 
@@ -107,4 +107,7 @@ jobs:
             ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4-${{steps.script.outputs.pgadmin_version_short}}
             ghcr.io/${{steps.script.outputs.github_repo}}:pgadmin4
             docker.io/${{steps.script.outputs.docker_repo}}:pgadmin4
+            docker.io/${{ secrets.DOCKER_USERNAME }}/pgadmin4:latest
+            docker.io/${{ secrets.DOCKER_USERNAME }}/pgadmin4:${{steps.script.outputs.pgadmin_version}}
+            docker.io/${{ secrets.DOCKER_USERNAME }}/pgadmin4:${{steps.script.outputs.pgadmin_version_short}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:pgadmin4
