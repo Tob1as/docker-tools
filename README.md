@@ -3,25 +3,27 @@
 Tools collection
 
 All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Container Registries:
-* `ghcr.io/tob1asdocker/tools:<TAG>`
-* `tobi312/tools:<TAG>` [#](https://hub.docker.com/r/tobi312/tools)
-* `quay.io/tobi312/tools:<TAG>` [#](https://quay.io/repository/tobi312/tools)
+* [`ghcr.io/tob1asdocker/tools:<TAG>`](https://github.com/Tob1asDocker/tools/pkgs/container/tools)
+* [`tobi312/tools:<TAG>`](https://hub.docker.com/r/tobi312/tools)
+* [`quay.io/tobi312/tools:<TAG>`](https://quay.io/repository/tobi312/tools)
 
 Tools/Tags:
-* `figlet`
-* `toolbox`
-* `pgadmin4`
+* [`figlet`](#figlet)
+* [`toolbox`](#toolbox)
+* [`pgadmin4`](#pgadmin4)
 
 ## figlet 
 
 [FIGlet](http://www.figlet.org/) is a computer program that generates text banners.
+
+This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1asDocker/tools/blob/main/figlet.multiarch.alpine.Dockerfile) for more details.
 
 ### Example
 ```sh
 docker run --rm --name figlet -it tobi312/tools:figlet 'Hello :D'
 ```
 Output:
-```sh
+```
  _   _      _ _           ____
 | | | | ___| | | ___    _|  _ \
 | |_| |/ _ \ | |/ _ \  (_) | | |
@@ -34,6 +36,8 @@ Output:
 
 Toolbox with git, wget, curl, nano, netcat and more.
 
+This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1asDocker/tools/blob/main/toolbox.multiarch.alpine.Dockerfile) for more details.
+
 ### Example for Docker
 ```sh
 # start
@@ -44,8 +48,12 @@ docker exec -it toolbox sh
 nc -zv -w 3 <HOST> <PORT>
 ```
 
-### Example for Kubernetes 
-Create file `toolbox.yaml` with this content:
+### Example for Kubernetes
+
+<details>
+<summary>Create file `toolbox.yaml` with this content: (click)</summary>
+<p>
+
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -74,11 +82,14 @@ kubectl exec -it pod/toolbox -- sh
 nc -zv -w 3 <HOST> <PORT>
 ```
 
+</p>
+</details>
+
 ## pgAdmin4
 
 [pgAdmin4](https://www.pgadmin.org/) is a Open Source graphical management tool for PostgreSQL.
 
-The Images are [build](https://github.com/Tob1asDocker/tools/blob/main/.github/workflows/build_docker_images-pgadmin4.yaml) from offical [GitHub Repo](https://github.com/postgres/pgadmin4).
+This Docker Image is [build](https://github.com/Tob1asDocker/tools/blob/main/.github/workflows/build_docker_images-pgadmin4.yaml) from offical [GitHub Repo](https://github.com/postgres/pgadmin4).
 
 For configuration see [https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html](https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html)!
 
@@ -96,7 +107,6 @@ services:
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@email.local
       - PGADMIN_DEFAULT_PASSWORD=passw0rd
-      #- PGADMIN_LISTEN_ADDRESS=0.0.0.0
       - PGADMIN_LISTEN_PORT=5050
       - SCRIPT_NAME=/pgadmin
       # INFO: use PGADMIN_CONFIG_ prefix for any variable name from config.py
@@ -113,6 +123,8 @@ services:
       retries: 5
 ```
 
+URL: `http://HOSTNAME:5050/pgadmin`
+
 ### Example for Kubernetes 
 
 <details>
@@ -128,7 +140,6 @@ metadata:
   labels:
     app: pgadmin4
 data:
-  #PGADMIN_LISTEN_ADDRESS: "0.0.0.0"
   PGADMIN_LISTEN_PORT: "5050"
   SCRIPT_NAME: "/pgadmin"
   # INFO: use PGADMIN_CONFIG_ prefix for any variable name from config.py
@@ -248,6 +259,8 @@ spec:
               number: 5050
 
 ```
+
+URL: `http://HOSTNAME:5050/pgadmin`
 
 </p>
 </details>
