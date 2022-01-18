@@ -100,7 +100,7 @@ Create a file `docker-compose.yml` with this content:
 version: "2.4"
 services:
   pgadmin4:
-    image: tobi312/tools:pgadmin4
+    image: tobi312/pgadmin4:latest
     container_name: pgadmin4
     volumes:
       - ./pgadmin:/var/lib/pgadmin
