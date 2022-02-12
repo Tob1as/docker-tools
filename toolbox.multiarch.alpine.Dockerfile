@@ -41,7 +41,7 @@ RUN apk add --no-cache \
     makepasswd \
     jq \
     ; \
-    echo 'alias ll="ls -lah"' >> /etc/profile
+    echo "Tools installed!"
 
 # Database Tools	
 #RUN apk add --no-cache \
