@@ -27,20 +27,21 @@ RUN apk add --no-cache \
     netcat-openbsd \
     date \
     zip unzip \
-	xz \
-	tree \
-	patch \
-	screen \
-	tmux \
-	openssh-client \
-	rsync \
-	ca-certificates \
-	openssl \
-	pwgen \
-	makepasswd \
-	jq \
-	; \
-	echo 'alias ll="ls -lah"' >> /etc/profile
+    xz \
+    tree \
+    patch \
+    screen \
+    tmux \
+    openssh-client \
+    rsync \
+    #autossh \
+    ca-certificates \
+    openssl \
+    pwgen \
+    makepasswd \
+    jq \
+    ; \
+    echo 'alias ll="ls -lah"' >> /etc/profile
 
 # Database Tools	
 #RUN apk add --no-cache \
