@@ -26,8 +26,23 @@ RUN apk add --no-cache \
     iputils \
     netcat-openbsd \
     date \
-    zip unzip
-	
+    zip unzip \
+	xz \
+	tree \
+	patch \
+	screen \
+	tmux \
+	openssh-client \
+	rsync \
+	ca-certificates \
+	openssl \
+	pwgen \
+	makepasswd \
+	jq \
+	; \
+	echo 'alias ll="ls -lah"' >> /etc/profile
+
+# Database Tools	
 #RUN apk add --no-cache \
 #    mariadb-client>10.6 \
 #    mosquitto-clients>2.0.10 \
