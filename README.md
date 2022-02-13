@@ -48,6 +48,41 @@ docker exec -it toolbox sh
 nc -zv -w 3 <HOST> <PORT>
 ```
 
+### Example for Docker-Compose
+
+<details>
+<summary>Create file `toolbox.yml` with this content: (click)</summary>
+<p>
+
+```yml
+version: '2.4'
+services:
+
+  toolbox:
+    image: tobi312/tools:toolbox
+    container_name: toolbox
+    restart: unless-stopped
+    #user: "1000:1000"  # format: "${UID}:${GID}"
+    #environment:
+    #  TZ: Europe/Berlin
+    #entrypoint: [ "/bin/sh", "-c", "--" ]
+    #command: [ "while true; do sleep 60; done;" ] 
+```
+and then:
+```sh
+# start
+docker-compose -f toolbox.yml up -d
+# exec (you can use sh or bash)
+docker-compose -f toolbox.yml exec toolbox sh
+# or
+docker exec -it toolbox sh
+# use (example: check port is open)
+nc -zv -w 3 <HOST> <PORT>
+```
+
+</p>
+</details>
+
 ### Example for Kubernetes
 
 <details>
@@ -99,6 +134,7 @@ Create a file `docker-compose.yml` with this content:
 ```yaml
 version: "2.4"
 services:
+
   pgadmin4:
     image: tobi312/pgadmin4:latest
     container_name: pgadmin4
