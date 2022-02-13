@@ -63,8 +63,6 @@ services:
     container_name: toolbox
     restart: unless-stopped
     #user: "1000:1000"  # format: "${UID}:${GID}"
-    #environment:
-    #  TZ: Europe/Berlin
     #entrypoint: [ "/bin/sh", "-c", "--" ]
     #command: [ "while true; do sleep 60; done;" ] 
 ```
