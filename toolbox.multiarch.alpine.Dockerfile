@@ -25,7 +25,7 @@ RUN apk add --no-cache \
     curl \
     iputils \
     netcat-openbsd \
-    date \
+    tzdata \
     zip unzip \
     xz \
     tree \
@@ -47,7 +47,9 @@ RUN apk add --no-cache \
 #RUN apk add --no-cache \
 #    mariadb-client>10.6 \
 #    mosquitto-clients>2.0.10 \
-#    postgresql14-client
+#    postgresql14-client \
+#    ; \
+#    echo "Databse-Tools installed!"
 
 ENTRYPOINT ["/bin/sh", "-c", "--"]
 CMD ["while true; do sleep 60; done;"]
