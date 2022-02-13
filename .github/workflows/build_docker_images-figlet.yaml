@@ -5,6 +5,9 @@ on:
   #  branches:
   #    - 'main'
   #    - 'master'
+  #  paths:
+  #    - 'figlet.multiarch.alpine.Dockerfile'
+  #    - '.github/workflows/build_docker_images-figlet.yaml'
   workflow_dispatch:
   schedule:
     - cron: '30 5 28 * *'  # At 05:30 on day-of-month 28.
