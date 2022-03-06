@@ -126,7 +126,7 @@ This Docker Image is [build](https://github.com/Tob1asDocker/tools/blob/main/.gi
 
 For configuration see [https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html](https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html)!
 
-### Example for Docker
+### Example for Docker-Compose
 
 Create a file `docker-compose.yml` with this content:
 ```yaml
@@ -296,5 +296,38 @@ spec:
 
 URL: `http://HOSTNAME:5050/pgadmin`
 
+</p>
+</details>
+
+## dnsmasq
+
+[dnsmasq](https://thekelleys.org.uk/dnsmasq/doc.html) is a lightweight dns and dhcp server.
+
+### Example for Docker-Compose
+
+<details>
+<summary>Create file `docker-compose.yml` with this content: (click)</summary>
+<p>
+
+```yaml
+version: "2.4"
+services:
+
+  dnsmasq:
+    image: tobi312/tools:dnsmasq
+    container_name: dnsmasq
+    restart: unless-stopped
+    ports:
+      - 53:53/tcp # DNS
+      - 53:53/udp # DNS
+      - 67:67/udp # DHCP
+      - 68:68/udp # DHCP
+      #- 69:69/udp # TFTP
+    volumes:
+      - ./dnsmasq/:/etc/dnsmasq.d/:rw  # add your config files in this folder
+    #network_mode: host
+    cap_add:
+      - 'NET_ADMIN'
+```
 </p>
 </details>
