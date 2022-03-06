@@ -11,6 +11,7 @@ Tools/Tags:
 * [`figlet`](#figlet)
 * [`toolbox`](#toolbox)
 * [`pgadmin4`](#pgadmin4)
+* [`dnsmasq`](#dnsmasq)
 
 ## figlet 
 
