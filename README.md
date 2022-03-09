@@ -321,8 +321,8 @@ services:
     ports:
       - 53:53/tcp # DNS
       - 53:53/udp # DNS
-      - 67:67/udp # DHCP
-      - 68:68/udp # DHCP
+      - 67:67/udp # DHCP Server
+      #- 68:68/udp # DHCP Client
       #- 69:69/udp # TFTP
     volumes:
       - ./dnsmasq/:/etc/dnsmasq.d/:rw  # add your config files in this folder
