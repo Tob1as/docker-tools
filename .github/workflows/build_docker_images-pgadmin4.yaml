@@ -32,7 +32,7 @@ jobs:
           REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
           
           #PGADMIN_VERSION_TAG=$(curl -s https://api.github.com/repos/postgres/pgadmin4/tags | grep 'name' | cut -d\" -f4 | head -n 1)
-          PGADMIN_VERSION_TAG="REL-6_5"
+          PGADMIN_VERSION_TAG="REL-6_6"
           git clone --branch ${PGADMIN_VERSION_TAG} --single-branch https://github.com/postgres/pgadmin4.git ./pgadmin4
           # fix yarn timeout: https://github.com/yarnpkg/yarn/issues/4890#issuecomment-348479446
           echo "network-timeout 1000000" >> ./pgadmin4/web/.yarnrc
