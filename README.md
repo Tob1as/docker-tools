@@ -38,7 +38,7 @@ Output:
 
 Toolbox with git, wget, curl, nano, netcat and more.
 
-This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1asDocker/tools/blob/main/toolbox.multiarch.alpine.Dockerfile) and [Dockerfile](https://github.com/Tob1asDocker/tools/blob/main/toolbox_extended.multiarch.alpin.Dockerfile) for more details.
+This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1asDocker/tools/blob/main/toolbox.multiarch.alpine.Dockerfile) and [Dockerfile (extended)](https://github.com/Tob1asDocker/tools/blob/main/toolbox_extended.multiarch.alpine.Dockerfile) for more details.
 
 ### Example for Docker
 ```sh
