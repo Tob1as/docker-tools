@@ -3,7 +3,7 @@ FROM ghcr.io/tob1asdocker/tools:toolbox
 # Database Tools	
 RUN apk add --no-cache \
         mariadb-client>10.6 mariadb-backup>10.6 \
-        postgresql14-client \
+        postgresql14-client>14.3 \
         mongodb-tools>4.2 \
         mosquitto-clients>2.0 \
     ; \
@@ -15,9 +15,11 @@ RUN apk add --no-cache \
 # Storage Tools	
 RUN apk add --no-cache \
         aws-cli>1.19 \
-        libc6-compat \ 
+        samba-client>4.15 \
+        libc6-compat>1.2 \ 
     ; \
     aws --version ; \
+    smbclient --version ; \
     \
     ARCH=`uname -m` ; \
     echo "ARCH=$ARCH" ; \
