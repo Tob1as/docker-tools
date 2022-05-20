@@ -90,3 +90,20 @@ jobs:
             ghcr.io/${{steps.script.outputs.github_repo}}:toolbox
             docker.io/${{steps.script.outputs.docker_repo}}:toolbox
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:toolbox
+
+      - name: Build-extended
+        uses: docker/build-push-action@v2
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./toolbox_extended.multiarch.alpin.Dockerfile
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm/v6
+          push: true
+          #build-args: |
+          #  BUILD_DATE=${{steps.script.outputs.build_date}}
+          #  VCS_REF=${{steps.script.outputs.commit_hash}}
+          tags: |
+            ghcr.io/${{steps.script.outputs.github_repo}}:toolbox-extended-${{steps.script.outputs.build_date_numeric}}.${{steps.script.outputs.commit_hash}}
+            ghcr.io/${{steps.script.outputs.github_repo}}:toolbox-extended
+            docker.io/${{steps.script.outputs.docker_repo}}:toolbox-extended
+            quay.io/${{steps.script.outputs.redhat_quay_repo}}:toolbox-extended
