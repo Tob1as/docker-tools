@@ -27,7 +27,7 @@ RUN apk add --no-cache \
         wget -qO- https://aka.ms/downloadazcopy-v10-linux  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
         azcopy --version ; \
     else \
-       echo "AZCopy: unsupported arch" ; \
+        echo "AZCopy: unsupported arch" ; \
     fi ; \ 
     \
     echo ">> Storage-Tools installed!"
