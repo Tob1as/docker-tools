@@ -10,6 +10,7 @@ All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Cont
 Tools/Tags:
 * [`figlet`](#figlet)
 * [`toolbox`](#toolbox)
+* [`toolbox-extended`](#toolbox)
 * [`pgadmin4`](#pgadmin4)
 * [`dnsmasq`](#dnsmasq)
 
