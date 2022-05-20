@@ -29,7 +29,7 @@ RUN \
 # PHP-EXTENSIONs
 RUN	install-php-extensions \
     #pdo_dblib \
-    oci8 \
+    #oci8 \
     #interbase \
     #pdo_firebird \
     mongodb
