@@ -13,26 +13,13 @@ RUN apk add --no-cache \
     echo ">> Databse-Tools installed!"
 
 # Database Tools Part 2 
-# mongosh (with nodejs/npm)
+# mongosh (with nodejs/npm https://jira.mongodb.org/browse/MONGOSH-1246)
 RUN \
     apk add --no-cache \
         npm \
     ; \
     npm i -g mongosh ; \
     mongosh --version
-# mongosh (with binary, not working on alpine, libresolv error https://jira.mongodb.org/browse/MONGOSH-1246)
-#RUN \
-#    apk add --no-cache \
-#        krb5-libs \
-#        gcompat \
-#    ; \
-#    #ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2 ; \
-#    MONGOSH_VERSION="$(curl -s https://api.github.com/repos/mongodb-js/mongosh/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/[^0-9.]*//g')" ; \
-#    wget -qO- https://downloads.mongodb.com/compass/mongosh-${MONGOSH_VERSION}-linux-x64.tgz  | tar xfz - --strip-components=2 -C ./ mongosh-${MONGOSH_VERSION}-linux-x64/bin ; \
-#    mv mongosh /usr/local/bin/ ; \
-#    mv mongosh_*.so /usr/local/lib/ ; \
-#    chmod +x /usr/local/bin/mongosh ; \
-#    mongosh --version
 	
 # Storage Tools	
 RUN apk add --no-cache \
