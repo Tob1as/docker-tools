@@ -31,11 +31,11 @@ jobs:
           DOCKER_REPO=${{ secrets.DOCKER_USERNAME }}/${GITHUB_REPO_SHORT}
           REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
           
-          PGADMIN_VERSION_TAG=$(curl -s https://api.github.com/repos/postgres/pgadmin4/tags | grep 'name' | cut -d\" -f4 | head -n 1)
+          PGADMIN_VERSION_TAG=$(curl -s https://api.github.com/repos/pgadmin-org/pgadmin4/tags | grep 'name' | cut -d\" -f4 | head -n 1)
           #PGADMIN_VERSION_TAG="REL-6_5"
           git clone --branch ${PGADMIN_VERSION_TAG} --single-branch https://github.com/postgres/pgadmin4.git ./pgadmin4
           # fix yarn timeout: https://github.com/yarnpkg/yarn/issues/4890#issuecomment-348479446
-          #echo "network-timeout 1000000" >> ./pgadmin4/web/.yarnrc
+          echo "network-timeout 1000000" >> ./pgadmin4/web/.yarnrc
           # workaround cryptography: https://stackoverflow.com/questions/66118337/how-to-get-rid-of-cryptography-build-error/68472128#68472128
           #sed -i "s/cryptography.*/cryptography==3.4.*/" ./pgadmin4/requirements.txt
           #sed -i '/^COPY requirements.txt /a ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1' ./pgadmin4/Dockerfile

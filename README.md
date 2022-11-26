@@ -124,7 +124,7 @@ nc -zv -w 3 <HOST> <PORT>
 
 [pgAdmin4](https://www.pgadmin.org/) is a Open Source graphical management tool for PostgreSQL.
 
-This Docker Image is [build](https://github.com/Tob1asDocker/tools/blob/main/.github/workflows/build_docker_images-pgadmin4.yaml) from offical [GitHub Repo](https://github.com/postgres/pgadmin4).
+This Docker Image is [build](https://github.com/Tob1asDocker/tools/blob/main/.github/workflows/build_docker_images-pgadmin4.yaml) from offical [GitHub Repo](https://github.com/pgadmin-org/pgadmin4).
 
 For configuration see [https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html](https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html)!
 
