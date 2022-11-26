@@ -35,7 +35,7 @@ jobs:
           #PGADMIN_VERSION_TAG="REL-6_5"
           git clone --branch ${PGADMIN_VERSION_TAG} --single-branch https://github.com/postgres/pgadmin4.git ./pgadmin4
           # fix yarn timeout: https://github.com/yarnpkg/yarn/issues/4890#issuecomment-348479446
-          echo "network-timeout 1000000" >> ./pgadmin4/web/.yarnrc
+          #echo "network-timeout 1000000" >> ./pgadmin4/web/.yarnrc
           # workaround cryptography: https://stackoverflow.com/questions/66118337/how-to-get-rid-of-cryptography-build-error/68472128#68472128
           #sed -i "s/cryptography.*/cryptography==3.4.*/" ./pgadmin4/requirements.txt
           #sed -i '/^COPY requirements.txt /a ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1' ./pgadmin4/Dockerfile
@@ -46,7 +46,7 @@ jobs:
           #sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libldap \\' ./pgadmin4/Dockerfile
           #sed -i '/libcap && \\/a \ \ \ \ ln -s /usr/lib/libldap-2.4.so.2 /usr/lib/libldap.so.2 && \\' ./pgadmin4/Dockerfile
           # fix: ImportError: Error loading shared library libsodium.so.23: No such file or directory (needed by /venv/lib/python3.9/site-packages/nacl/_sodium.abi3.so)
-          sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libsodium \\' ./pgadmin4/Dockerfile
+          #sed -i '/libedit \\/a \ \ \ \ \ \ \ \ libsodium \\' ./pgadmin4/Dockerfile
 
           PGADMIN_VERSION=$(echo $PGADMIN_VERSION_TAG | sed 's/REL-//' | sed 's/_/./')
           PGADMIN_VERSION_SHORT=${PGADMIN_VERSION%.*}
