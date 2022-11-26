@@ -6,8 +6,8 @@ on:
   #    - 'main'
   #    - 'master'
   workflow_dispatch:
-  schedule:
-    - cron: '30 6 28 * *'  # At 06:30 on day-of-month 28.
+  #schedule:
+  #  - cron: '30 6 28 * *'  # At 06:30 on day-of-month 28.
 
 defaults:
   run:
