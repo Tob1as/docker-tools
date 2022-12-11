@@ -1,4 +1,4 @@
-FROM ghcr.io/tob1asdocker/tools:toolbox
+FROM ghcr.io/tob1as/docker-tools:toolbox
 
 # Database Tools	
 RUN apk add --no-cache \
