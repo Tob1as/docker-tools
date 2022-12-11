@@ -12,7 +12,7 @@ LABEL org.opencontainers.image.title="Adminer" \
 	org.opencontainers.image.base.name="docker.io/library/adminer:standalone" \
 	org.opencontainers.image.licenses="Apache-2.0" \
 	org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
-	org.opencontainers.image.source="https://github.com/Tob1asDocker/tools"
+	org.opencontainers.image.source="https://github.com/Tob1as/docker-tools"
 
 # pdo_dblib (MS SQL) - install by default, oci8 (Oracle), interbase/pdo_firebird (Firebird), mongodb (MongoDB)
 

@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.title="dnsmasq" \
       org.opencontainers.image.base.name="docker.io/library/alpine:latest" \
       org.opencontainers.image.licenses="Apache-2.0" \
       org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
-      org.opencontainers.image.source="https://github.com/Tob1asDocker/tools"
+      org.opencontainers.image.source="https://github.com/Tob1as/docker-tools"
 
 RUN apk add --no-cache \
         tzdata \

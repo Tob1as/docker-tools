@@ -13,7 +13,7 @@ LABEL org.opencontainers.image.title="figlet" \
 	org.opencontainers.image.description="http://www.figlet.org/ | docker run --rm --name figlet -it tobi312/tools:figlet 'Hello :D'" \
 	org.opencontainers.image.licenses="Apache-2.0" \
 	org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
-	org.opencontainers.image.source="https://github.com/Tob1asDocker/tools"
+	org.opencontainers.image.source="https://github.com/Tob1as/docker-tools"
 
 RUN apk --no-cache add figlet figlet-doc \
 	; \

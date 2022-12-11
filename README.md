@@ -3,7 +3,7 @@
 Tools collection
 
 All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Container Registries:
-* [`ghcr.io/tob1asdocker/tools:<TAG>`](https://github.com/Tob1asDocker/tools/pkgs/container/tools)
+* [`ghcr.io/tob1as/docker-tools:<TAG>`](https://github.com/Tob1as/docker-tools/pkgs/container/tools)
 * [`tobi312/tools:<TAG>`](https://hub.docker.com/r/tobi312/tools)
 * [`quay.io/tobi312/tools:<TAG>`](https://quay.io/repository/tobi312/tools)
 
@@ -18,7 +18,7 @@ Tools/Tags:
 
 [FIGlet](http://www.figlet.org/) is a computer program that generates text banners.
 
-This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1asDocker/tools/blob/main/figlet.multiarch.alpine.Dockerfile) for more details.
+This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1as/docker-tools/blob/main/figlet.multiarch.alpine.Dockerfile) for more details.
 
 ### Example
 ```sh
@@ -38,7 +38,7 @@ Output:
 
 Toolbox with git, wget, curl, nano, netcat and more.
 
-This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1asDocker/tools/blob/main/toolbox.multiarch.alpine.Dockerfile) and [Dockerfile (extended)](https://github.com/Tob1asDocker/tools/blob/main/toolbox_extended.multiarch.alpine.Dockerfile) for more details.
+This Docker Image is based on latest AlpineLinux, see [Dockerfile](https://github.com/Tob1as/docker-tools/blob/main/toolbox.multiarch.alpine.Dockerfile) and [Dockerfile (extended)](https://github.com/Tob1as/docker-tools/blob/main/toolbox_extended.multiarch.alpine.Dockerfile) for more details.
 
 ### Example for Docker
 ```sh
@@ -124,7 +124,7 @@ nc -zv -w 3 <HOST> <PORT>
 
 [pgAdmin4](https://www.pgadmin.org/) is a Open Source graphical management tool for PostgreSQL.
 
-This Docker Image is [build](https://github.com/Tob1asDocker/tools/blob/main/.github/workflows/build_docker_images-pgadmin4.yaml) from offical [GitHub Repo](https://github.com/pgadmin-org/pgadmin4).
+This Docker Image is [build](https://github.com/Tob1as/docker-tools/blob/main/.github/workflows/build_docker_images-pgadmin4.yaml) from offical [GitHub Repo](https://github.com/pgadmin-org/pgadmin4).
 
 For configuration see [https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html](https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html)!
 
@@ -213,7 +213,7 @@ spec:
     spec:
       containers:
         - name: pgadmin4
-          image: dpage/pgadmin4:latest
+          image: tobi312/pgadmin4:latest # dpage/pgadmin4:latest
           imagePullPolicy: Always
           envFrom:
           - configMapRef:
