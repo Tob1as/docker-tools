@@ -40,6 +40,7 @@ RUN apk add --no-cache \
         pwgen \
         makepasswd \
         jq \
+        bind-tools \
     ; \
     echo ">> Tools installed!"
 
