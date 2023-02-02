@@ -20,6 +20,7 @@ USER root
 RUN set -eux ; \
     installPackages=' \
         php7.4-mongodb \
+        netcat-openbsd \
     ' ; \
     apt-get update ; \
     apt-get install -y $installPackages --no-install-recommends ; \
