@@ -16,7 +16,7 @@ ARG VCS_REF
 ARG BUILD_DATE
 ARG AZCOPY_VERSION
 LABEL org.opencontainers.image.title="AzCopy" \
-      org.opencontainers.image.description="MinIO is a High Performance Object Storage, API compatible with Amazon S3 cloud storage service." \
+      org.opencontainers.image.description="AzCopy is a command-line utility that you can use to copy blobs or files to or from a storage account." \
       org.opencontainers.image.authors="Tobias Hargesheimer <docker@ison.ws>" \
       org.opencontainers.image.version="${AZCOPY_VERSION}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
