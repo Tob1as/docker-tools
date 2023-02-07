@@ -34,6 +34,7 @@ COPY --from=redis:alpine /usr/local/bin/redis-cli /usr/local/bin/redis-cli
 #    echo ">> Databse-Tools Part 3 (via COPY) installed!"
 	
 # Storage Tools	
+COPY --from=tobi312/tools:azcopy /azcopy /usr/local/bin/azcopy
 RUN apk add --no-cache \
         aws-cli \
         samba-client \
@@ -45,19 +46,19 @@ RUN apk add --no-cache \
     aws --version ; \
     smbclient --version ; \
     \
-    ARCH=`uname -m` ; \
-    echo "ARCH=$ARCH" ; \
-    if [ "$ARCH" == "x86_64" ]; then \
-        echo "AZCopy: install on x86_64 (amd64) arch" ; \
-        # AzCopy need libc6-compat, see https://github.com/Azure/azure-storage-azcopy/issues/621#issuecomment-538617518
-        wget -qO- https://aka.ms/downloadazcopy-v10-linux  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
-        azcopy --version ; \
-    elif [ "$ARCH" == "aarch64" ]; then \
-        echo "AZCopy: install on aarch64 (arm64) arch" && \
-        wget -qO- https://aka.ms/downloadazcopy-v10-linux-arm64  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
-        azcopy --version ; \
-    else \
-        echo "AZCopy: unsupported arch" ; \
-    fi ; \ 
+    #ARCH=`uname -m` ; \
+    #echo "ARCH=$ARCH" ; \
+    #if [ "$ARCH" == "x86_64" ]; then \
+    #    echo "AZCopy: install on x86_64 (amd64) arch" ; \
+    #    # AzCopy need libc6-compat, see https://github.com/Azure/azure-storage-azcopy/issues/621#issuecomment-538617518
+    #    wget -qO- https://aka.ms/downloadazcopy-v10-linux  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
+    #    azcopy --version ; \
+    #elif [ "$ARCH" == "aarch64" ]; then \
+    #    echo "AZCopy: install on aarch64 (arm64) arch" && \
+    #    wget -qO- https://aka.ms/downloadazcopy-v10-linux-arm64  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
+    #    azcopy --version ; \
+    #else \
+    #    echo "AZCopy: unsupported arch" ; \
+    #fi ; \ 
     \
     echo ">> Storage-Tools installed!"
