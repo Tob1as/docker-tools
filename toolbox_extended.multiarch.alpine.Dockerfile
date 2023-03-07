@@ -1,5 +1,7 @@
 FROM ghcr.io/tob1as/docker-tools:toolbox
 
+#USER root
+
 # Database Tools	
 RUN apk add --no-cache \
         mariadb-client mariadb-backup \
@@ -62,3 +64,5 @@ RUN apk add --no-cache \
     fi ; \ 
     \
     echo ">> Storage-Tools installed!"
+
+#USER user
