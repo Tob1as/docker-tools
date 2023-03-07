@@ -64,6 +64,7 @@ services:
 
   toolbox:
     image: tobi312/tools:toolbox
+    #image: tobi312/tools:toolbox-extended
     container_name: toolbox
     restart: unless-stopped
     #user: "1000:1000"  # format: "${UID}:${GID}"
