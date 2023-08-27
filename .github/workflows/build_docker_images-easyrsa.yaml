@@ -36,8 +36,8 @@ jobs:
           REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
 
           # easy-rsa
-          VERSION=$(curl -s https://api.github.com/repos/OpenVPN/easy-rsa/releases/latest | grep 'tag_name' | cut -d\" -f4 | egrep -o "([0-9]{1,}\.)+[0-9]{1,}")
-          echo "EASY_RSA_VERSION=${VERSION}"
+          EASY_RSA_VERSION=$(curl -s https://api.github.com/repos/OpenVPN/easy-rsa/releases/latest | grep 'tag_name' | cut -d\" -f4 | egrep -o "([0-9]{1,}\.)+[0-9]{1,}")
+          echo "EASY_RSA_VERSION=${EASY_RSA_VERSION}"
           
           # Set output parameters to github action.
           echo ::set-output name=build_date::${BUILD_DATE}
@@ -48,7 +48,7 @@ jobs:
           echo ::set-output name=redhat_quay_repo::${REDHAT_QUAY_REPO}
 
           # easy-rsa
-          echo ::set-output name=steps.script.outputs.version::${VERSION}
+          echo ::set-output name=steps.script.outputs.easy_rsa_version::${EASY_RSA_VERSION}
 
       - name: Set up QEMU
         id: qemu
@@ -93,12 +93,12 @@ jobs:
           build-args: |
             BUILD_DATE=${{steps.script.outputs.build_date}}
             VCS_REF=${{steps.script.outputs.commit_hash}}
-            VERSION=${{steps.script.outputs.version}}
+            VERSION=${{steps.script.outputs.easy_rsa_version}}
           tags: |
             docker.io/${{steps.script.outputs.docker_repo}}:easy-rsa
-            docker.io/${{steps.script.outputs.docker_repo}}:easy-rsa-${{steps.script.outputs.version}}
+            docker.io/${{steps.script.outputs.docker_repo}}:easy-rsa-${{steps.script.outputs.easy_rsa_version}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:easy-rsa
-            quay.io/${{steps.script.outputs.redhat_quay_repo}}:easy-rsa-${{steps.script.outputs.version}}
+            quay.io/${{steps.script.outputs.redhat_quay_repo}}:easy-rsa-${{steps.script.outputs.easy_rsa_version}}
             ghcr.io/${{steps.script.outputs.github_repo}}:easy-rsa
-            ghcr.io/${{steps.script.outputs.github_repo}}:easy-rsa-${{steps.script.outputs.version}}
+            ghcr.io/${{steps.script.outputs.github_repo}}:easy-rsa-${{steps.script.outputs.easy_rsa_version}}
           #  ghcr.io/${{steps.script.outputs.github_repo}}:easy-rsa-${{steps.script.outputs.build_date_numeric}}.${{steps.script.outputs.commit_hash}}
