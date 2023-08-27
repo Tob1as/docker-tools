@@ -10,6 +10,7 @@ All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Cont
 Tools/Tags:
 * [`azcopy`](#)
 * [`dnsmasq`](#dnsmasq)
+* [`easy-rsa`](#)
 * [`figlet`](#figlet)
 * [`mqtt-client`](#)
 * [`pgadmin4`](#pgadmin4)
@@ -336,3 +337,17 @@ services:
 ```
 </p>
 </details>
+
+## easy-rsa
+
+[easy-rsa](https://github.com/OpenVPN/easy-rsa) is a CLI utility to build and manage a PKI CA.
+
+* offical [Docs](https://easy-rsa.readthedocs.io)
+* [Dockerfile](https://github.com/Tob1as/docker-tools/blob/main/easy-rsa.multiarch.alpine.Dockerfile)
+
+### Example
+```sh
+docker run --rm --name easy-rsa -v ${PWD}/easyrsa-data:/easyrsa:rw -it tobi312/tools:easy-rsa help
+# or
+docker run --rm --name easy-rsa -v ${PWD}/easyrsa-data:/easyrsa:rw -it tobi312/tools:easy-rsa init-pki
+```
