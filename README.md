@@ -10,9 +10,9 @@ All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Cont
 Tools/Tags:
 * [`azcopy`](#)
 * [`dnsmasq`](#dnsmasq)
-* [`easy-rsa`](#)
+* [`easy-rsa`](#easy-rsa)
 * [`figlet`](#figlet)
-* [`mqtt-client`](#)
+* [`mqtt-client`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-client.yml)
 * [`pgadmin4`](#pgadmin4)
 * [`toolbox`](#toolbox)
 * [`toolbox-extended`](#toolbox)
