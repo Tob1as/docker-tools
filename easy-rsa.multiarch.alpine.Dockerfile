@@ -42,8 +42,8 @@ RUN apk add --no-cache --virtual .build-deps \
     mkdir -p ${EASY_RSA_PATH} ; \
     INSTALL_FILES="EasyRSA-${VERSION}/easyrsa EasyRSA-${VERSION}/openssl-easyrsa.cnf EasyRSA-${VERSION}/vars.example EasyRSA-${VERSION}/x509-types" ; \
     curl -sL  https://github.com/OpenVPN/easy-rsa/releases/download/v${VERSION}/EasyRSA-${VERSION}.tgz | tar xfz - --strip-components=1 $INSTALL_FILES -C ${EASY_RSA_PATH} ; \
-    apk del --no-network --purge .build-deps ; \
-    ln -s /usr/share/easy-rsa/easyrsa /usr/local/bin/easyrsa
+    ln -s ${EASY_RSA_PATH}/easyrsa /usr/local/bin/easyrsa ; \
+    apk del --no-network --purge .build-deps
 	
 USER easyrsa
 WORKDIR /easyrsa
