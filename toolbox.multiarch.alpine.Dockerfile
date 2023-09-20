@@ -44,6 +44,7 @@ RUN \
         makepasswd \
         jq \
         bind-tools \
+        apache2-utils \
     ; \
     echo ">> Tools installed!"
 
