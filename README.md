@@ -12,6 +12,7 @@ Tools/Tags:
 * [`dnsmasq`](#dnsmasq)
 * [`easy-rsa`](#easy-rsa)
 * [`figlet`](#figlet)
+* [`htpasswd`](#)
 * [`mqtt-client`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-client.yml)
 * [`pgadmin4`](#pgadmin4)
 * [`toolbox`](#toolbox)
