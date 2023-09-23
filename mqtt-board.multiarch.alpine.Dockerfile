@@ -1,4 +1,5 @@
 FROM node:lts-alpine AS builder
+#FROM node:18.18-alpine3.18 AS builder
 
 ARG VERSION
 
