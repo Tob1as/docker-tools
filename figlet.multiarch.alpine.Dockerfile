@@ -1,3 +1,4 @@
+# build: docker build --no-cache --progress=plain -t tobi312/tools:figlet -f figlet.multiarch.alpine.Dockerfile .
 FROM alpine:latest
 
 SHELL ["/bin/sh", "-euxo", "pipefail", "-c"]
@@ -27,6 +28,8 @@ RUN apk --no-cache add figlet figlet-doc \
 		wget -qO- ftp://ftp.figlet.org/pub/figlet/fonts/${fonts}.tar.gz | tar xvz -C /usr/share/figlet/fonts/ \
 		; \
 	done
+
+USER nobody
 
 ENTRYPOINT ["figlet"]
 CMD ["--help"]

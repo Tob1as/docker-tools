@@ -25,5 +25,7 @@ COPY --from=builder /usr/bin/htpasswd /usr/bin/htpasswd
 
 RUN apk add --no-cache apr-util
 
+USER nobody
+
 ENTRYPOINT ["htpasswd"]
 CMD ["--help"]
