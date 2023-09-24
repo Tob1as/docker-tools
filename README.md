@@ -369,7 +369,7 @@ services:
 ### Example(s)
 
 <details>
-<summary>Example (1) - root-ca & certs</summary>
+<summary>Example (1) - root-ca & certs:  (click)</summary>
 <p>
 
 ```sh
@@ -393,7 +393,7 @@ openssl x509 -noout -text -in ${PWD}/data_easyrsa/pki/issued/example-com.crt
 
 
 <details>
-<summary>Example (2) - root-ca, intermediate-ca & certs  </summary>
+<summary>Example (2) - root-ca, intermediate-ca & certs:  (click)</summary>
 <p>
 
 **Preparation**:
@@ -478,7 +478,7 @@ openssl x509 -noout -text -in ${PWD}/intermediate-ca/issued/example-com.crt
 ### Notes
 
 <details>
-<summary>Notes ...</summary>
+<summary>Notes ...:  (click)</summary>
 <p>
 
 * instead `-e EASYRSA_PKI="/easyrsa/root-ca"` you can use in command `--pki-dir=/easyrsa/root-ca`
