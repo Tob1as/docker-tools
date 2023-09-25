@@ -373,16 +373,21 @@ services:
 <p>
 
 ```sh
+mkdir ~/data_easyrsa
+# IMPORANT: Execute all Command from this/next Folder !!
+cd ~/data_easyrsa
+
 # help
 docker run --rm --name easy-rsa -it tobi312/tools:easy-rsa help
-# create ca
+# init pki
 docker run --rm --name easy-rsa -v ${PWD}/data_easyrsa:/easyrsa:rw -it tobi312/tools:easy-rsa init-pki
+# now EDIT "vars"-File in ./pki and then build ca:
 docker run --rm --name easy-rsa -v ${PWD}/data_easyrsa:/easyrsa:rw -it tobi312/tools:easy-rsa build-ca
 
-# Certs
-# create cert for domain
+# Server Cert
+# create server cert request
 docker run --rm --name easy-rsa -v ${PWD}/data_easyrsa:/easyrsa:rw -it tobi312/tools:easy-rsa --subject-alt-name="DNS:example.com,DNS:*.example.com,IP:192.168.1.100" gen-req example-com nopass
-# sign cert for domain
+# sign server cert
 docker run --rm --name easy-rsa -v ${PWD}/data_easyrsa:/easyrsa:rw -it tobi312/tools:easy-rsa sign-req server example-com
 # check cert
 openssl verify -verbose -CAfile ${PWD}/data_easyrsa/pki/ca.crt ${PWD}/data_easyrsa/pki/issued/example-com.crt
@@ -398,9 +403,9 @@ openssl x509 -noout -text -in ${PWD}/data_easyrsa/pki/issued/example-com.crt
 
 **Preparation**:
 ```sh
-mkdir -p ${PWD}/data_easyrsa
+mkdir ~/data_easyrsa
 # IMPORANT: Execute all Command from this/next Folder !!
-cd ${PWD}/data_easyrsa
+cd ~/data_easyrsa
 ```
 
 **root-ca**:
