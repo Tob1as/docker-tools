@@ -153,7 +153,10 @@ For configuration see [https://www.pgadmin.org/docs/pgadmin4/latest/container_de
 
 ### Example for Docker-Compose
 
-Create a file `docker-compose.yml` with this content:
+<details>
+<summary>Create a file `docker-compose.yml` with this content:  (click)</summary>
+<p>
+
 ```yaml
 version: "2.4"
 services:
@@ -183,6 +186,9 @@ services:
 ```
 
 URL: `http://HOSTNAME:5050/pgadmin`  
+
+</p>
+</details>
   
 other [Example](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/pgadmin.yml)
 
