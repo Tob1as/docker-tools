@@ -395,7 +395,7 @@ docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa
 # now EDIT "vars"-File in ./pki and then build ca:
 docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa build-ca
 
-# Server Cert
+# Server Cert (repeat this steps for other domains)
 # create server cert request
 docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa --subject-alt-name="DNS:example.com,DNS:*.example.com,IP:192.168.1.100" gen-req example-com nopass
 # sign server cert
