@@ -6,13 +6,13 @@ FROM golang:${GOLANG_VERSION}-alpine as builder
 ENV CGO_ENABLED 0
 #ENV GO111MODULE on
 
-RUN  \
+RUN \
     apk add --no-cache git ; \
-	git clone https://github.com/dgl/ircd_exporter.git ./ircd_exporter ; \
-	cd ./ircd_exporter ; \
-	go mod download ; \
-	cd ./cmd/ircd_exporter/ ; \
-	go build 
+    git clone https://github.com/dgl/ircd_exporter.git ./ircd_exporter ; \
+    cd ./ircd_exporter ; \
+    go mod download ; \
+    cd ./cmd/ircd_exporter/ ; \
+    go build 
 
 	
 FROM scratch
@@ -20,11 +20,11 @@ FROM scratch
 ARG BUILD_DATE
 
 LABEL org.opencontainers.image.title="ircd_exporter" \
-	org.opencontainers.image.created="${BUILD_DATE}" \
-	org.opencontainers.image.description="Prometheus exporter for IRC server state" \
-	org.opencontainers.image.licenses="MIT" \
-	org.opencontainers.image.url="" \
-	org.opencontainers.image.source="https://github.com/dgl/ircd_exporter"
+    org.opencontainers.image.created="${BUILD_DATE}" \
+    org.opencontainers.image.description="Prometheus exporter for IRC server state" \
+    org.opencontainers.image.licenses="MIT" \
+    org.opencontainers.image.url="" \
+    org.opencontainers.image.source="https://github.com/dgl/ircd_exporter"
 
 COPY --from=builder --chown=100:100 /go/ircd_exporter/cmd/ircd_exporter/ircd_exporter /usr/local/bin/ircd_exporter
 
