@@ -1,4 +1,4 @@
-# docker build --no-cache --progress=plain --build-arg GOLANG_VERSION=1.21 -t docker.io/local/ircd-exporter:latest -f Dockerfile .
+# docker build --no-cache --progress=plain --build-arg GOLANG_VERSION=1.21 -t tobi312/tools:ircd-exporter -f Dockerfile .
 ARG GOLANG_VERSION=1.21
 FROM golang:${GOLANG_VERSION}-alpine as builder
 
