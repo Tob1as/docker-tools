@@ -17,7 +17,7 @@ RUN  \
 	
 FROM scratch
 
-ARG VCS_REF
+ARG BUILD_DATE
 
 LABEL org.opencontainers.image.title="ircd_exporter" \
 	org.opencontainers.image.created="${BUILD_DATE}" \
