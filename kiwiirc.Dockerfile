@@ -5,7 +5,7 @@ ARG KIWIIRC_VERSION
 RUN \
     case "$(uname -m)" in \
         x86_64|amd64) TARGETARCH="amd64" ;; \
-        arm64|aarch64) TARGETARCH="aarch64" ;; \
+        arm64|aarch64) TARGETARCH="arm64" ;; \
         armhf|armv7l|armv6l) TARGETARCH="armhf" ;; \
         *) echo "unknown arch";; \
     esac ; \
