@@ -23,7 +23,7 @@ LABEL org.opencontainers.image.title="ircd_exporter" \
     org.opencontainers.image.created="${BUILD_DATE}" \
     org.opencontainers.image.description="Prometheus exporter for IRC server state" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.url="" \
+    org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
     org.opencontainers.image.source="https://github.com/dgl/ircd_exporter"
 
 COPY --from=builder --chown=100:100 /go/ircd_exporter/cmd/ircd_exporter/ircd_exporter /usr/local/bin/ircd_exporter
