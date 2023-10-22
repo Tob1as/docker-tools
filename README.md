@@ -139,6 +139,8 @@ kubectl exec -it pod/toolbox -- sh
 # use (example: check port is open)
 nc -zv -w 3 <HOST> <PORT>
 ```
+  
+Or [example](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_k8s/toolbox.yaml) for Deployment.
 
 </p>
 </details>
