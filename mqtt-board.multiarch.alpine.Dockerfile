@@ -13,8 +13,8 @@ RUN \
 WORKDIR /app/MQTT-Board
 
 RUN \
-    npm config set fetch-retry-maxtimeout 6000000 \
-    npm config set fetch-retry-mintimeout 1000000 \
+    npm config set fetch-retry-maxtimeout 6000000 ; \
+    npm config set fetch-retry-mintimeout 1000000 ; \
     npm install ; \
     NODE_OPTIONS=--openssl-legacy-provider ./node_modules/.bin/quasar build
 
