@@ -31,4 +31,4 @@ COPY --from=builder --chown=100:100 /go/ircd_exporter/cmd/ircd_exporter/ircd_exp
 USER 100:100
 EXPOSE 9678/tcp
 ENTRYPOINT ["ircd_exporter"]
-CMD ["--help"]
+#CMD ["--help"]
