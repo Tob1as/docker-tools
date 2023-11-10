@@ -47,7 +47,7 @@ COPY --from=builder --chown=nobody:nogroup /usr/src/prometheus-mqtt-transport/ex
 
 USER nobody
 
-#EXPOSE 9999/tcp
+#EXPOSE 9999/tcp 9998/tcp 9991/tcp
 #ENTRYPOINT ["prom2mqtt-fetch"]
 #ENTRYPOINT ["prom2mqtt-export"]
 #CMD ["--help"]
