@@ -10,6 +10,7 @@ RUN apk update ; \
 WORKDIR /go/mqtt-forwarder
 RUN make all
 
+#FROM alpine:latest
 FROM scratch
 ARG VCS_REF
 ARG BUILD_DATE
@@ -24,6 +25,7 @@ LABEL org.opencontainers.image.title="mqtt-forwarder" \
       org.opencontainers.image.licenses="GPL-3.0" \
       org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
       org.opencontainers.image.source="https://github.com/Bobobo-bo-Bo-bobo/mqtt-forwarder"
+#RUN apk add --no-cache ca-certificates
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder --chown=1000:1000 /go/mqtt-forwarder/bin/mqtt-forwarder /usr/local/bin/mqtt-forwarder
 COPY --from=builder --chown=1000:1000 /go/mqtt-forwarder/example/config.ini /etc/mqtt-forwarder/config.ini
