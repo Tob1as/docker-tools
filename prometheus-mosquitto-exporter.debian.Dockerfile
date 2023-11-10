@@ -45,7 +45,7 @@ COPY --from=builder --chown=nobody:nogroup /usr/src/prometheus-mosquitto-exporte
 
 USER nobody
 
-#EXPOSE 6883/tcp
+#EXPOSE 6883/tcp 9883/tcp
 ENTRYPOINT ["prometheus-mosquitto-exporter"]
 #CMD ["--help"]
 CMD ["--config=/etc/prometheus-mosquitto-exporter/config.yaml"]
