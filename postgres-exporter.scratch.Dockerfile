@@ -45,8 +45,8 @@ LABEL org.opencontainers.image.title="Prometheus PostgreSQL Exporter" \
       org.opencontainers.image.documentation="https://github.com/prometheus-community/postgres_exporter" \
       org.opencontainers.image.base.name="scratch" \
       org.opencontainers.image.licenses="Apache-2.0" \
-	  org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
-	  org.opencontainers.image.source="https://github.com/prometheus-community/postgres_exporter"
+      org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
+      org.opencontainers.image.source="https://github.com/prometheus-community/postgres_exporter"
 
 COPY --from=builder --chown=100:100 /tmp/postgres_exporter/postgres_exporter /usr/local/bin/postgres_exporter
 
