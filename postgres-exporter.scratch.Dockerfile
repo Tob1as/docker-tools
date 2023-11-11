@@ -13,9 +13,9 @@ RUN \
         ARCH="amd64"; \
     elif [ "$ARCH" == "aarch64" ]; then \
         ARCH="arm64"; \
-    elif [ "$ARCH" == "armv7"* ]; then \
+    elif [ "$ARCH" == "armv7l" ]; then \
         ARCH="armv7"; \
-    elif [ "$ARCH" == "armv6"* ]; then \
+    elif [ "$ARCH" == "armv6l" ]; then \
         ARCH="armv6"; \
     else \
         echo "unknown arch" && \
