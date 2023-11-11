@@ -1,12 +1,13 @@
 # docker build --no-cache --progress=plain -t tobi312/tools:prometheus-mosquitto-exporter -f prometheus-mosquitto-exporter.debian.Dockerfile .
 FROM rust:1.73-slim-bookworm AS builder
 
+ARG VERSION=master
 ENV RUST_BACKTRACE=1
 
 RUN apt update && apt install -y pkg-config libssl-dev cmake git
 
 WORKDIR /usr/src/
-RUN git clone https://github.com/Bobobo-bo-Bo-bobo/prometheus-mosquitto-exporter prometheus-mosquitto-exporter
+RUN git clone --branch ${VERSION} --single-branch https://github.com/Bobobo-bo-Bo-bobo/prometheus-mosquitto-exporter.git prometheus-mosquitto-exporter
 
 WORKDIR /usr/src/prometheus-mosquitto-exporter
 #COPY . .
