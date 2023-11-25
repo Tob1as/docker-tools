@@ -7,7 +7,7 @@ ENV RUST_BACKTRACE=1
 RUN apt update && apt install -y pkg-config libssl-dev cmake git
 
 WORKDIR /usr/src/
-RUN git clone --branch ${VERSION} --single-branch https://github.com/Bobobo-bo-Bo-bobo/prometheus-mqtt-transport.git prometheus-mqtt-transport
+RUN git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/prometheus-mqtt-transport.git prometheus-mqtt-transport
 
 WORKDIR /usr/src/prometheus-mqtt-transport
 #COPY . .
@@ -31,7 +31,7 @@ LABEL org.opencontainers.image.title="prometheus-mqtt-transport" \
       org.opencontainers.image.base.name="docker.io/library/debian:bookworm-slim" \
       org.opencontainers.image.licenses="GPL-3.0" \
       org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
-      org.opencontainers.image.source="https://github.com/Bobobo-bo-Bo-bobo/prometheus-mqtt-transport"
+      org.opencontainers.image.source="https://git.ypbind.de/cgit/prometheus-mqtt-transport/"
 
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
