@@ -394,7 +394,10 @@ cd ~/data_easyrsa
 # root-ca
 # init pki
 docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa init-pki
-# now EDIT "vars"-File in ./pki and then build ca:
+# download "vars"-File
+curl -sL https://github.com/OpenVPN/easy-rsa/raw/master/easyrsa3/vars.example -o ./pki/vars
+# now EDIT "vars"-File in ./pki and then
+#  and then build ca:
 docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa build-ca
 
 # Server Cert (repeat this steps for other domains)
@@ -427,7 +430,10 @@ cd ~/data_easyrsa
 docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa init-pki soft
 # ASK: Confirm removal: yes
 
-# now EDIT "vars"-File in ./root-ca and then build ca:
+# download "vars"-File
+curl -sL https://github.com/OpenVPN/easy-rsa/raw/master/easyrsa3/vars.example -o ${PWD}/root-ca/vars
+# now EDIT "vars"-File in ./root-ca and then
+# and then build ca:
 docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa build-ca
 # ASK: Enter New CA Key Passphrase:
 # ASK: Common Name (eg: your user, host, or server name) [Easy-RSA CA]: My Organization CA
@@ -443,7 +449,10 @@ openssl x509 -noout -text -in ${PWD}/root-ca/ca.crt
 docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa init-pki soft
 # ASK: Confirm removal: yes
 
-# now EDIT "vars"-File in ./intermediate-ca and then build subca:
+# download "vars"-File
+curl -sL https://github.com/OpenVPN/easy-rsa/raw/master/easyrsa3/vars.example -o ${PWD}/intermediate-ca/vars
+# now EDIT "vars"-File in ./intermediate-ca and then
+# and then build subca:
 docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa build-ca subca
 # ASK: Enter New CA Key Passphrase:
 # ASK: Common Name (eg: your user, host, or server name) [Easy-RSA CA]: My Organization Sub-CA
