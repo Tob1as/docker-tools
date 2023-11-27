@@ -476,8 +476,8 @@ openssl verify -verbose -CAfile ${PWD}/root-ca/ca.crt ${PWD}/intermediate-ca/ca.
 openssl x509 -noout -text -in ${PWD}/intermediate-ca/ca.crt
 
 
-# copy subca and ca in one file called fullCA.crt
-cat ${PWD}/root-ca/ca.crt ${PWD}/intermediate-ca/ca.crt > ${PWD}/fullCA.crt
+# copy subca and ca in one file called fullca.crt
+cat ${PWD}/intermediate-ca/ca.crt ${PWD}/root-ca/ca.crt > ${PWD}/fullca.crt
 ```
 
 **Server Cert** ... for Domain example.com:
@@ -492,7 +492,7 @@ docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${P
 # ASK: Enter pass phrase for /easyrsa/intermediate-ca/private/ca.key:
 
 # verify cert from subca and ca
-openssl verify -verbose -CAfile ${PWD}/fullCA.crt ${PWD}/intermediate-ca/issued/example-com.crt
+openssl verify -verbose -CAfile ${PWD}/fullca.crt ${PWD}/intermediate-ca/issued/example-com.crt
 # check/show content of cert file
 openssl x509 -noout -text -in ${PWD}/intermediate-ca/issued/example-com.crt
 
