@@ -45,6 +45,9 @@ RUN \
         jq \
         bind-tools \
         apache2-utils \
+        micro \
+        socat \
+        oath-toolkit-oathtool \
     ; \
     echo ">> Tools installed!"
 
