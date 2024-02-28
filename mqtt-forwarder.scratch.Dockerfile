@@ -2,13 +2,15 @@
 FROM golang:alpine AS builder
 SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 ARG VERSION=master
-ENV GO111MODULE=auto
+WORKDIR /app
 RUN apk update ; \
     apk add --no-cache git make binutils ; \
-    git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/mqtt-forwarder.git ; \
-    cd mqtt-forwarder/
-WORKDIR /go/mqtt-forwarder
-RUN make all
+    git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/mqtt-forwarder.git
+WORKDIR /app/mqtt-forwarder/src/mqtt-forwarder
+# create go.mod, go.sum and then build
+RUN go mod init mqtt-forwarder ; \
+    go mod tidy ; \
+    go build -o ../../bin/mqtt-forwarder .
 
 #FROM alpine:latest
 FROM scratch
@@ -27,8 +29,8 @@ LABEL org.opencontainers.image.title="mqtt-forwarder" \
       org.opencontainers.image.source="https://git.ypbind.de/cgit/mqtt-forwarder/"
 #RUN apk add --no-cache ca-certificates
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=builder --chown=1000:1000 /go/mqtt-forwarder/bin/mqtt-forwarder /usr/local/bin/mqtt-forwarder
-COPY --from=builder --chown=1000:1000 /go/mqtt-forwarder/example/config.ini /etc/mqtt-forwarder/config.ini
+COPY --from=builder --chown=1000:1000 /app/mqtt-forwarder/bin/mqtt-forwarder /usr/local/bin/mqtt-forwarder
+COPY --from=builder --chown=1000:1000 /app/mqtt-forwarder/example/config.ini /etc/mqtt-forwarder/config.ini
 USER 1000:1000
 ENTRYPOINT ["mqtt-forwarder"]
 #CMD ["--help"]
