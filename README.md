@@ -9,16 +9,26 @@ All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Cont
 
 Tools/Tags:
 * [`adminer`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/adminer.yml)
+* [`autossh`](#)
 * [`azcopy`](#)
 * [`dnsmasq`](#dnsmasq)
 * [`easy-rsa`](#easy-rsa)
 * [`figlet`](#figlet)
 * [`htpasswd`](#htpasswd)
+* [`irc-exporter`](#)
+* [`kiwiirc`](#)
 * [`mqtt-board`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-board.yml)
 * [`mqtt-client`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-client.yml)
-* [`pgadmin4`](#pgadmin4)
-* [`toolbox`](#toolbox)
-* [`toolbox-extended`](#toolbox)
+* [`mqtt-forwarder`](#)
+* [`postgres-exporter`](#)
+* [`prometheus-mosquitto-exporter`](#)
+* [`prometheus-mqtt-transport`](#)
+* [`squid`](#)
+* ToolBox:
+  * [`toolbox`](#toolbox)
+  * [`toolbox-extended`](#toolbox)
+* Deprecated:
+  * [`pgadmin4`](#pgadmin4)
 
 ## figlet 
 
