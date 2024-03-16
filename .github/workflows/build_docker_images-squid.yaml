@@ -1,7 +1,7 @@
 name: 'build docker images: Squid'
 
 on:
-  push:
+  #push:
   #  branches:
   #    - 'main'
   #    - 'master'
