@@ -391,7 +391,7 @@ services:
 
 ```sh
 # help
-docker run --rm --name easy-rsa -it tobi312/tools:easy-rsa help
+docker run --rm --name easy-rsa -it tobi312/tools:easy-rsa-3.1.7 help
 ```
 
 <details>
@@ -406,18 +406,18 @@ cd ~/data_easyrsa
 
 # root-ca
 # init pki
-docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa init-pki
+docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa-3.1.7 init-pki
 # download "vars"-File
 curl -sL https://github.com/OpenVPN/easy-rsa/raw/master/easyrsa3/vars.example -o ./pki/vars
 # now EDIT "vars"-File in ./pki
 # and then build ca:
-docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa build-ca
+docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa-3.1.7 build-ca
 
 # Server Cert (repeat this steps for other domains)
 # create server cert request
-docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa --subject-alt-name="DNS:example.com,DNS:*.example.com,IP:192.168.1.100" gen-req example-com nopass
+docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa-3.1.7 --subject-alt-name="DNS:example.com,DNS:*.example.com,IP:192.168.1.100" gen-req example-com nopass
 # sign server cert
-docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa sign-req server example-com
+docker run --rm --name easy-rsa -v ${PWD}:/easyrsa:rw -it tobi312/tools:easy-rsa-3.1.7 sign-req server example-com
 # check cert
 openssl verify -verbose -CAfile ${PWD}/pki/ca.crt ${PWD}/pki/issued/example-com.crt
 openssl x509 -noout -text -in ${PWD}/pki/issued/example-com.crt
@@ -440,14 +440,14 @@ cd ~/data_easyrsa
 **root-ca**:
 ```sh
 # init pki (need "soft" to write in mounted volume subpath "/easyrsa/root-ca" instead "/easyrsa/pki")
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa init-pki soft
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa-3.1.7 init-pki soft
 # ASK: Confirm removal: yes
 
 # download "vars"-File
 curl -sL https://github.com/OpenVPN/easy-rsa/raw/master/easyrsa3/vars.example -o ${PWD}/root-ca/vars
 # now EDIT "vars"-File in ./root-ca
 # and then build ca:
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa build-ca
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa-3.1.7 build-ca
 # ASK: Enter New CA Key Passphrase:
 # ASK: Common Name (eg: your user, host, or server name) [Easy-RSA CA]: My Organization CA
 
@@ -459,27 +459,27 @@ openssl x509 -noout -text -in ${PWD}/root-ca/ca.crt
 **intermediate-ca** = subca:
 ```sh
 # init pki (need "soft" to write in mounted volume subpath "/easyrsa/intermediate-ca" instead "/easyrsa/pki")
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa init-pki soft
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa-3.1.7 init-pki soft
 # ASK: Confirm removal: yes
 
 # download "vars"-File
 curl -sL https://github.com/OpenVPN/easy-rsa/raw/master/easyrsa3/vars.example -o ${PWD}/intermediate-ca/vars
 # now EDIT "vars"-File in ./intermediate-ca
 # and then build subca:
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa build-ca subca
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa-3.1.7 build-ca subca
 # ASK: Enter New CA Key Passphrase:
 # ASK: Common Name (eg: your user, host, or server name) [Easy-RSA CA]: My Organization Sub-CA
 
 # import subca in ca (Note: switch to root-ca):
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa import-req /easyrsa/intermediate-ca/reqs/ca.req intermediate-ca
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa-3.1.7 import-req /easyrsa/intermediate-ca/reqs/ca.req intermediate-ca
 
 # sign subca with ca (Note: switch to root-ca)
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa sign-req ca intermediate-ca
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/root-ca" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -it tobi312/tools:easy-rsa-3.1.7 sign-req ca intermediate-ca
 # ASK: Confirm request details: yes
 # ASK: Enter pass phrase for /easyrsa/root-ca/private/ca.key:
 
 # copy sign subca from root-ca to intermediate-ca folder
-docker run --rm --name easy-rsa --entrypoint="" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa cp /easyrsa/root-ca/issued/intermediate-ca.crt /easyrsa/intermediate-ca/ca.crt
+docker run --rm --name easy-rsa --entrypoint="" -v ${PWD}/root-ca/:/easyrsa/root-ca:rw -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa-3.1.7 cp /easyrsa/root-ca/issued/intermediate-ca.crt /easyrsa/intermediate-ca/ca.crt
 # or
 cp ${PWD}/root-ca/issued/intermediate-ca.crt ${PWD}/intermediate-ca/ca.crt
 
@@ -496,11 +496,11 @@ cat ${PWD}/intermediate-ca/ca.crt ${PWD}/root-ca/ca.crt > ${PWD}/fullca.crt
 **Server Cert** ... for Domain example.com:
 ```sh
 # create server cert request
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa --subject-alt-name="DNS:example.com,DNS:*.example.com,IP:192.168.1.100" gen-req example-com nopass
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa-3.1.7 --subject-alt-name="DNS:example.com,DNS:*.example.com,IP:192.168.1.100" gen-req example-com nopass
 # ASK: Common Name (eg: your user, host, or server name) [example-com]:example.com
 
 # sign server cert
-docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa sign-req server example-com
+docker run --rm --name easy-rsa -e EASYRSA_PKI="/easyrsa/intermediate-ca" -v ${PWD}/intermediate-ca/:/easyrsa/intermediate-ca:rw -it tobi312/tools:easy-rsa-3.1.7 sign-req server example-com
 # ASK: Confirm request details: yes
 # ASK: Enter pass phrase for /easyrsa/intermediate-ca/private/ca.key:
 
@@ -523,7 +523,7 @@ openssl x509 -noout -text -in ${PWD}/intermediate-ca/issued/example-com.crt
 
 * instead `-e EASYRSA_PKI="/easyrsa/root-ca"` you can use in command `--pki-dir=/easyrsa/root-ca`
 * Backup: execute `tar cvpzf backup_easyrsa_$(date '+%Y%m%d-%H%M').tar.gz .` in `data_easyrsa`-Folder!
-* `docker run --rm --name easy-rsa --entrypoint="" -it tobi312/tools:easy-rsa bash`
+* `docker run --rm --name easy-rsa --entrypoint="" -it tobi312/tools:easy-rsa-3.1.7 bash`
 * linux: copy ca-certs into  `/usr/local/share/ca-certificates/` and execute `dpkg-reconfigure -f noninteractive ca-certificates`
 * crlDistributionPoints: https://github.com/OpenVPN/easy-rsa/issues/71 & https://github.com/OpenVPN/easy-rsa/issues/472 & https://github.com/OpenVPN/easy-rsa/pull/15 & "/usr/share/easy-rsa/x509-types/COMMON
 * more help: https://github.com/OpenVPN/easy-rsa/issues/190#issuecomment-6786936427 & https://documentation.abas.cloud/en/abas-installer/Zertifikate_en/index.html
