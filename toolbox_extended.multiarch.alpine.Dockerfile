@@ -5,10 +5,11 @@ FROM ghcr.io/tob1as/docker-tools:toolbox
 # Database Tools	
 RUN apk add --no-cache \
         mariadb-client mariadb-backup \
-        postgresql13-client postgresql14-client postgresql15-client \
+        postgresql14-client postgresql15-client postgresql16-client \
         mongodb-tools \
         mosquitto-clients \
     ; \
+    #ln -snf /usr/libexec/postgresql15 /usr/libexec/postgresql ; \
     mariadb --version ; \
     psql --version ; \
     mongostat --version | grep mongostat ; \
