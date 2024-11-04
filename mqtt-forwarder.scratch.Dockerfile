@@ -1,11 +1,12 @@
-# docker build --no-cache --progress=plain -t tobi312/tools:mqtt-forwarder -f mqtt-forwarder.scratch.Dockerfile .
-FROM golang:1.23-alpine AS builder
+# docker build --no-cache --progress=plain --build-arg GO_VERSION=1.23 --build-arg VERSION=1.1.1 -t tobi312/tools:mqtt-forwarder -f mqtt-forwarder.scratch.Dockerfile .
+ARG GO_VERSION=1.23
+FROM golang:${GO_VERSION}-alpine AS builder
 ARG VERSION=1.1.1
 ENV GOPATH=/go
 ENV CGO_ENABLED=0
 RUN \
     #apk update ; \
-    apk add --no-cache git make binutils ; \
+    apk add --no-cache git binutils ; \
     git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/mqtt-forwarder.git ${GOPATH}/src/mqtt-forwarder ; \
     #wget -qO- https://git.ypbind.de/cgit/mqtt-forwarder/snapshot/mqtt-forwarder-${VERSION}.tar.gz | tar xzv ; mv mqtt-forwarder-${VERSION} ${GOPATH}/src/mqtt-forwarder ; \
     cd ${GOPATH}/src/mqtt-forwarder/src/mqtt-forwarder ; \
