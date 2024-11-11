@@ -1,4 +1,4 @@
-# docker build --no-cache --progress=plain --build-arg GO_VERSION=1.23 -t tobi312/tools:ircd-exporter -f ircd-exporter.Dockerfile .
+# docker build --no-cache --progress=plain --build-arg GO_VERSION=1.23 -t tobi312/tools:ircd-exporter -f ircd-exporter.scratch.Dockerfile .
 ARG GO_VERSION=1.23
 FROM golang:${GO_VERSION}-alpine AS builder
 ARG VERSION=master
