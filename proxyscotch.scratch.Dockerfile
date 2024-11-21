@@ -9,9 +9,9 @@ RUN \
     echo "Proxyscotch Version = ${VERSION}" ; \
     BUILD_OS=$(go env GOOS) ; \
     BUILD_ARCH=$(go env GOARCH) ; \
-    cd /etc ; \
+    cd /go ; \
     git clone --branch ${VERSION} --single-branch https://github.com/hoppscotch/proxyscotch.git ./proxyscotch ; \
-    cd /etc/proxyscotch ; \
+    cd /go/proxyscotch ; \
     # prepare for other arch https://github.com/hoppscotch/proxyscotch/blob/master/build.sh#L329
     sed -i "s/amd64/${BUILD_ARCH}/" build.sh ; \
     ./build.sh ${BUILD_OS} server ; \
