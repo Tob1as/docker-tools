@@ -1,4 +1,4 @@
-name: 'build docker images: static cURL'
+name: 'build docker images: Proxyscotch'
 
 on:
   #push:
