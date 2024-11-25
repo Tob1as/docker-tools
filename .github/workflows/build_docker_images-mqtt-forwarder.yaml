@@ -43,6 +43,10 @@ jobs:
           echo ::set-output name=docker_repo::${DOCKER_REPO}
           echo ::set-output name=redhat_quay_repo::${REDHAT_QUAY_REPO}
 
+          # mqtt-forwarder
+          MQTT_FORWARDER_VERSION="1.1.1"
+          echo "mqtt_forwarder_version=${MQTT_FORWARDER_VERSION}" >> "$GITHUB_OUTPUT"
+
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v2
@@ -86,6 +90,7 @@ jobs:
           build-args: |
             BUILD_DATE=${{steps.script.outputs.build_date}}
             VCS_REF=${{steps.script.outputs.commit_hash}}
+            VERSION=${{steps.script.outputs.mqtt_forwarder_version}}
           tags: |
             docker.io/${{steps.script.outputs.docker_repo}}:mqtt-forwarder
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:mqtt-forwarder

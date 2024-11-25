@@ -1,5 +1,5 @@
 # docker build --no-cache --progress=plain -t tobi312/tools:prometheus-mosquitto-exporter -f prometheus-mosquitto-exporter.debian.Dockerfile .
-FROM rust:1.73-slim-bookworm AS builder
+FROM rust:1.82-slim-bookworm AS builder
 
 ARG VERSION=master
 ENV RUST_BACKTRACE=1
@@ -7,12 +7,17 @@ ENV RUST_BACKTRACE=1
 RUN apt update && apt install -y pkg-config libssl-dev cmake git
 
 WORKDIR /usr/src/
-RUN git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/prometheus-mosquitto-exporter.git prometheus-mosquitto-exporter
+
+RUN \
+    git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/prometheus-mosquitto-exporter.git prometheus-mosquitto-exporter
+    #wget -qO- https://git.ypbind.de/cgit/prometheus-mosquitto-exporter/snapshot/prometheus-mosquitto-exporter-${VERSION}.tar.gz | tar xzv ; mv prometheus-mosquitto-exporter-${VERSION} prometheus-mosquitto-exporter
 
 WORKDIR /usr/src/prometheus-mosquitto-exporter
 #COPY . .
 
-RUN cargo build --release ; \
+RUN \
+    make all ; \
+    #cargo build --release ; \
     ls -lah /usr/src/prometheus-mosquitto-exporter/target/release
 
 

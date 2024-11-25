@@ -43,6 +43,10 @@ jobs:
           echo ::set-output name=docker_repo::${DOCKER_REPO}
           echo ::set-output name=redhat_quay_repo::${REDHAT_QUAY_REPO}
 
+          # prometheus-mqtt-transport
+          PROMETHEUS_MQTT_TRANSPORT="1.0.0"
+          echo ::set-output name=prometheus_mqtt_transport::${PROMETHEUS_MQTT_TRANSPORT}
+
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v2
@@ -86,6 +90,7 @@ jobs:
           build-args: |
             BUILD_DATE=${{steps.script.outputs.build_date}}
             VCS_REF=${{steps.script.outputs.commit_hash}}
+            VERSION=${{steps.script.outputs.prometheus_mqtt_transport}}
           tags: |
             docker.io/${{steps.script.outputs.docker_repo}}:prometheus-mqtt-transport
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:prometheus-mqtt-transport

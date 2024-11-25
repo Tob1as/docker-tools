@@ -1,5 +1,5 @@
 # docker build --no-cache --progress=plain -t tobi312/tools:prometheus-mqtt-transport -f prometheus-mqtt-transport.debian.Dockerfile .
-FROM rust:1.73-slim-bookworm AS builder
+FROM rust:1.82-slim-bookworm AS builder
 
 ARG VERSION=master
 ENV RUST_BACKTRACE=1
@@ -7,12 +7,17 @@ ENV RUST_BACKTRACE=1
 RUN apt update && apt install -y pkg-config libssl-dev cmake git
 
 WORKDIR /usr/src/
-RUN git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/prometheus-mqtt-transport.git prometheus-mqtt-transport
+
+RUN \
+    git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/prometheus-mqtt-transport.git prometheus-mqtt-transport
+    #wget -qO- https://git.ypbind.de/cgit/prometheus-mqtt-transport/snapshot/prometheus-mqtt-transport-${VERSION}.tar.gz | tar xzv ; mv prometheus-mqtt-transport-${VERSION} prometheus-mqtt-transport
 
 WORKDIR /usr/src/prometheus-mqtt-transport
 #COPY . .
 
-RUN cargo build --release ; \
+RUN \
+    make all ; \
+    #cargo build --release ; \
     ls -lah /usr/src/prometheus-mqtt-transport/target/release
 
 

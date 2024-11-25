@@ -1,7 +1,7 @@
-# docker build --no-cache --progress=plain -t tobi312/tools:c-mqtt-forwarder -f c-mqtt-forwarder.Dockerfile .
+# docker build --no-cache --progress=plain -t tobi312/tools:c-mqtt-forwarder -f c-mqtt-forwarder.alpine.Dockerfile .
 FROM alpine:latest AS builder
 
-ARG VERSION=1.0.0
+ARG VERSION=master
 
 RUN \
     apk update ; \
@@ -22,8 +22,8 @@ RUN \
 WORKDIR /usr/src/
 
 RUN \
-    #git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/c-mqtt-forwarder.git c-mqtt-forwarder
-    wget -qO- https://git.ypbind.de/cgit/c-mqtt-forwarder/snapshot/c-mqtt-forwarder-${VERSION}.tar.gz | tar xzv ; mv c-mqtt-forwarder-${VERSION} c-mqtt-forwarder
+    git clone --branch ${VERSION} --single-branch https://git.ypbind.de/repository/c-mqtt-forwarder.git c-mqtt-forwarder
+    #wget -qO- https://git.ypbind.de/cgit/c-mqtt-forwarder/snapshot/c-mqtt-forwarder-${VERSION}.tar.gz | tar xzv ; mv c-mqtt-forwarder-${VERSION} c-mqtt-forwarder
 
 WORKDIR /usr/src/c-mqtt-forwarder
 
