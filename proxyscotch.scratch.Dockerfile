@@ -5,7 +5,7 @@ ARG VERSION
 # Proxyscotch
 RUN \
     apk add --no-cache git ; \
-    VERSION=${VERSION:-$(wget -qO- https://api.github.com/repos/hoppscotch/proxyscotch/tags | grep 'name' | cut -d\" -f4 | sort -r | head -1)} ; \
+    VERSION=${VERSION:-$(wget -qO- https://api.github.com/repos/hoppscotch/proxyscotch/tags | grep 'name' | cut -d\" -f4 | sort -r | sed -n 's/^v[0-9]\+\.[0-9]\+\.[0-9]\+$/&/p' | head -1)} ; \
     echo "Proxyscotch Version = ${VERSION}" ; \
     BUILD_OS=$(go env GOOS) ; \
     BUILD_ARCH=$(go env GOARCH) ; \
