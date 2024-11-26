@@ -20,8 +20,12 @@ RUN \
     #cargo build --release ; \
     ls -lah /usr/src/prometheus-mosquitto-exporter/target/release
 
+RUN sed -i '/^\s*broker:/s/tls:/ssl:/' etc/prometheus-mosquitto-exporter.yaml
 
-FROM debian:bookworm-slim
+
+# https://github.com/GoogleContainerTools/distroless
+# hadolint ignore=DL3006
+FROM gcr.io/distroless/cc-debian12:latest AS production
 
 ARG VCS_REF
 ARG BUILD_DATE
@@ -33,15 +37,13 @@ LABEL org.opencontainers.image.title="prometheus-mosquitto-exporter" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.description="Export statistics of Mosquitto MQTT broker (topic: \$SYS) to Prometheus" \
       org.opencontainers.image.documentation="https://ypbind.de/maus/projects/prometheus-mosquitto-exporter/" \
-      org.opencontainers.image.base.name="docker.io/library/debian:bookworm-slim" \
+      org.opencontainers.image.base.name="gcr.io/distroless/cc-debian12:latest" \
       org.opencontainers.image.licenses="GPL-3.0" \
       org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
       org.opencontainers.image.source="https://git.ypbind.de/cgit/prometheus-mosquitto-exporter/"
 
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
-
-RUN apt-get update && apt-get install -y ca-certificates libssl-dev && rm -rf /var/lib/apt/lists/* ; \
-    mkdir -p /etc/prometheus-mosquitto-exporter/
+# certs
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 # binary
 COPY --from=builder --chown=nobody:nogroup /usr/src/prometheus-mosquitto-exporter/target/release/prometheus-mosquitto-exporter /usr/local/bin/prometheus-mosquitto-exporter

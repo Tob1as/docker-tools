@@ -21,7 +21,9 @@ RUN \
     ls -lah /usr/src/prometheus-mqtt-transport/target/release
 
 
-FROM debian:bookworm-slim AS base
+# https://github.com/GoogleContainerTools/distroless
+# hadolint ignore=DL3006
+FROM gcr.io/distroless/cc-debian12:latest AS production
 
 ARG VCS_REF
 ARG BUILD_DATE
@@ -33,15 +35,13 @@ LABEL org.opencontainers.image.title="prometheus-mqtt-transport" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.description="Scrape Prometheus exporter, transport data over MQTT and expose transported metric data to Prometheus" \
       org.opencontainers.image.documentation="https://ypbind.de/maus/projects/prometheus-mqtt-transport/index.html" \
-      org.opencontainers.image.base.name="docker.io/library/debian:bookworm-slim" \
+      org.opencontainers.image.base.name="gcr.io/distroless/cc-debian12:latest" \
       org.opencontainers.image.licenses="GPL-3.0" \
       org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
       org.opencontainers.image.source="https://git.ypbind.de/cgit/prometheus-mqtt-transport/"
 
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
-
-RUN apt-get update && apt-get install -y ca-certificates libssl-dev && rm -rf /var/lib/apt/lists/* ; \
-    mkdir -p /etc/prometheus-mqtt-transport/
+# certs
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 # binaries
 COPY --from=builder --chown=nobody:nogroup /usr/src/prometheus-mqtt-transport/target/release/prom2mqtt-fetch /usr/local/bin/prom2mqtt-fetch
@@ -53,7 +53,7 @@ COPY --from=builder --chown=nobody:nogroup /usr/src/prometheus-mqtt-transport/ex
 
 USER nobody
 
-#EXPOSE 9999/tcp 9998/tcp 9991/tcp
+#EXPOSE 9999/tcp
 #ENTRYPOINT ["prom2mqtt-fetch"]
 #ENTRYPOINT ["prom2mqtt-export"]
 #CMD ["--help"]
