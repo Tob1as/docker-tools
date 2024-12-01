@@ -1,0 +1,109 @@
+name: 'build docker images: c-mqtt-forwarder (distroless)'
+
+on:
+  #push:
+  #  branches:
+  #    - 'main'
+  #    - 'master'
+  #  paths:
+  #    - 'c-mqtt-forwarder.distroless.debian.Dockerfile'
+  #    - '.github/workflows/build_docker_images-c-mqtt-forwarder_distroless.yaml'
+  workflow_dispatch:
+  schedule:
+    - cron: '30 6 28 * *'  # At 06:30 on day-of-month 28.
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Shell-Script
+        id: script
+        run: |
+          BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          BUILD_DATE_NUMERIC="${BUILD_DATE//[^[:digit:]]/}"
+          COMMIT_HASH=${GITHUB_SHA::8}
+          GITHUB_REPO=${GITHUB_REPOSITORY,,}
+          GITHUB_REPO_SHORT=${GITHUB_REPO#*/}
+          GITHUB_REPO_SHORT=${GITHUB_REPO_SHORT#"docker-"}
+          DOCKER_REPO=${{ secrets.DOCKER_USERNAME }}/${GITHUB_REPO_SHORT}
+          REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
+          
+          # Set output parameters to action.
+          echo "build_date=${BUILD_DATE}" >> "$GITHUB_OUTPUT"
+          echo "build_date_numeric=${BUILD_DATE_NUMERIC}" >> "$GITHUB_OUTPUT"
+          echo "commit_hash=${COMMIT_HASH}" >> "$GITHUB_OUTPUT"
+          echo "github_repo=${GITHUB_REPO}" >> "$GITHUB_OUTPUT"
+          echo "docker_repo=${DOCKER_REPO}" >> "$GITHUB_OUTPUT"
+          echo "redhat_quay_repo=${REDHAT_QUAY_REPO}" >> "$GITHUB_OUTPUT"
+
+          # c-mqtt-forwarder
+          #C_MQTT_FORWARDER_VERSION=$(git ls-remote --tags "https://git.ypbind.de/repository/c-mqtt-forwarder.git" | awk -F/ '{print $NF}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
+          #C_MQTT_FORWARDER_VERSION=$(curl -s "https://git.ypbind.de/cgit/c-mqtt-forwarder/refs/" | grep -oE '/tag/\?h=[0-9]+\.[0-9]+\.[0-9]+' | sed -E 's|.*/tag/\?h=([0-9]+\.[0-9]+\.[0-9]+)|\1|' | sort -V | tail -n1)
+          C_MQTT_FORWARDER_VERSION="1.0.0"
+          echo "c_mqtt_forwarder_version=${C_MQTT_FORWARDER_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v3
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub 
+        uses: docker/login-action@v2
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Login to RED HAT Quay.io Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: quay.io
+          username: ${{ secrets.REDHAT_QUAY_USERNAME }}
+          password: ${{ secrets.REDHAT_QUAY_PASSWORD }}
+
+      - name: Build
+        uses: docker/build-push-action@v6
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./c-mqtt-forwarder.distroless.debian.Dockerfile
+          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm/v6
+          push: true
+          build-args: |
+            BUILD_DATE=${{steps.script.outputs.build_date}}
+            VCS_REF=${{steps.script.outputs.commit_hash}}
+            VERSION=${{steps.script.outputs.c_mqtt_forwarder_version}}
+          tags: |
+            docker.io/${{steps.script.outputs.docker_repo}}:c-mqtt-forwarder-distroless
+            docker.io/${{steps.script.outputs.docker_repo}}:c-mqtt-forwarder-${{steps.script.outputs.c_mqtt_forwarder_version}}-distroless
+            quay.io/${{steps.script.outputs.redhat_quay_repo}}:c-mqtt-forwarder-distroless
+            ghcr.io/${{steps.script.outputs.github_repo}}:c-mqtt-forwarder-distroless
+
+      #- name: Docker Hub Description
+      #  uses: peter-evans/dockerhub-description@v4
+      #  with:
+      #    username: ${{ secrets.DOCKER_USERNAME }}
+      #    password: ${{ secrets.DOCKER_PASSWORD }}
+      #    repository: ${{steps.script.outputs.docker_repo}}
+      #    short-description: ${{ github.event.repository.description }}
+      #    readme-filepath: README.md
