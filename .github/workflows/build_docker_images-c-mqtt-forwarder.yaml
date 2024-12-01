@@ -29,26 +29,23 @@ jobs:
           BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           BUILD_DATE_NUMERIC="${BUILD_DATE//[^[:digit:]]/}"
           COMMIT_HASH=${GITHUB_SHA::8}
-          GIT_URL=$(echo "${GITHUB_SERVER_URL}" | awk -F/ '{print $3}' | sed 's/\/*$//')
-          GIT_URL=$(echo "$GIT_URL" | sed 's/github\.com/ghcr\.io/g')   # GIT_URL switch to ghcr.io registry for GitHub
-          GIT_REPO=${GITHUB_REPOSITORY,,}
-          GIT_REPO_SHORT=${GIT_REPO#*/}
-          GIT_REPO_SHORT=${GIT_REPO_SHORT#"docker-"}
-          DOCKER_REPO=${{ secrets.DOCKER_USERNAME }}/${GIT_REPO_SHORT}
-          REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GIT_REPO_SHORT}
-
-          echo "ENVs: BUILD_DATE=${BUILD_DATE}, BUILD_DATE_NUMERIC=${BUILD_DATE_NUMERIC}, COMMIT_HASH=${COMMIT_HASH}, GIT_URL=${GIT_URL}, GIT_REPO=${GIT_REPO}"
+          GITHUB_REPO=${GITHUB_REPOSITORY,,}
+          GITHUB_REPO_SHORT=${GITHUB_REPO#*/}
+          GITHUB_REPO_SHORT=${GITHUB_REPO_SHORT#"docker-"}
+          DOCKER_REPO=${{ secrets.DOCKER_USERNAME }}/${GITHUB_REPO_SHORT}
+          REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
           
           # Set output parameters to action.
           echo "build_date=${BUILD_DATE}" >> "$GITHUB_OUTPUT"
           echo "build_date_numeric=${BUILD_DATE_NUMERIC}" >> "$GITHUB_OUTPUT"
           echo "commit_hash=${COMMIT_HASH}" >> "$GITHUB_OUTPUT"
-          echo "git_url=${GIT_URL}" >> "$GITHUB_OUTPUT"
-          echo "git_repo=${GIT_REPO}" >> "$GITHUB_OUTPUT"
+          echo "github_repo=${GITHUB_REPO}" >> "$GITHUB_OUTPUT"
           echo "docker_repo=${DOCKER_REPO}" >> "$GITHUB_OUTPUT"
           echo "redhat_quay_repo=${REDHAT_QUAY_REPO}" >> "$GITHUB_OUTPUT"
 
           # c-mqtt-forwarder
+          #C_MQTT_FORWARDER_VERSION=$(git ls-remote --tags "https://git.ypbind.de/repository/c-mqtt-forwarder.git" | awk -F/ '{print $NF}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
+          #C_MQTT_FORWARDER_VERSION=$(curl -s "https://git.ypbind.de/cgit/c-mqtt-forwarder/refs/" | grep -oE '/tag/\?h=[0-9]+\.[0-9]+\.[0-9]+' | sed -E 's|.*/tag/\?h=([0-9]+\.[0-9]+\.[0-9]+)|\1|' | sort -V | tail -n1)
           C_MQTT_FORWARDER_VERSION="1.0.0"
           echo "c_mqtt_forwarder_version=${C_MQTT_FORWARDER_VERSION}" >> "$GITHUB_OUTPUT"
 
@@ -61,24 +58,24 @@ jobs:
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v3          
+        uses: docker/setup-buildx-action@v3
 
-      - name: Login to GIT Container Registry
-        uses: docker/login-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
         with:
-          registry: ${{ steps.script.outputs.git_url }}
+          registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to DockerHub Container Registry
-        uses: docker/login-action@v3
+      - name: Login to DockerHub 
+        uses: docker/login-action@v2
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Login to RED HAT Quay.io Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v2
         with:
           registry: quay.io
           username: ${{ secrets.REDHAT_QUAY_USERNAME }}
@@ -98,8 +95,9 @@ jobs:
             VERSION=${{steps.script.outputs.c_mqtt_forwarder_version}}
           tags: |
             docker.io/${{steps.script.outputs.docker_repo}}:c-mqtt-forwarder
+            docker.io/${{steps.script.outputs.docker_repo}}:c-mqtt-forwarder-${{steps.script.outputs.c_mqtt_forwarder_version}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:c-mqtt-forwarder
-            ${{steps.script.outputs.git_url}}/${{steps.script.outputs.git_repo}}:c-mqtt-forwarder
+            ghcr.io/${{steps.script.outputs.github_repo}}:c-mqtt-forwarder
 
       #- name: Docker Hub Description
       #  uses: peter-evans/dockerhub-description@v4

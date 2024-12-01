@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Shell-Script
         id: script
@@ -35,28 +35,30 @@ jobs:
           DOCKER_REPO=${{ secrets.DOCKER_USERNAME }}/${GITHUB_REPO_SHORT}
           REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GITHUB_REPO_SHORT}
           
-          # Set output parameters to github action.
-          echo ::set-output name=build_date::${BUILD_DATE}
-          echo ::set-output name=build_date_numeric::${BUILD_DATE_NUMERIC}
-          echo ::set-output name=commit_hash::${COMMIT_HASH}
-          echo ::set-output name=github_repo::${GITHUB_REPO}
-          echo ::set-output name=docker_repo::${DOCKER_REPO}
-          echo ::set-output name=redhat_quay_repo::${REDHAT_QUAY_REPO}
+          # Set output parameters to action.
+          echo "build_date=${BUILD_DATE}" >> "$GITHUB_OUTPUT"
+          echo "build_date_numeric=${BUILD_DATE_NUMERIC}" >> "$GITHUB_OUTPUT"
+          echo "commit_hash=${COMMIT_HASH}" >> "$GITHUB_OUTPUT"
+          echo "github_repo=${GITHUB_REPO}" >> "$GITHUB_OUTPUT"
+          echo "docker_repo=${DOCKER_REPO}" >> "$GITHUB_OUTPUT"
+          echo "redhat_quay_repo=${REDHAT_QUAY_REPO}" >> "$GITHUB_OUTPUT"
 
           # mqtt-forwarder
+          #MQTT_FORWARDER_VERSION=$(git ls-remote --tags "https://git.ypbind.de/repository/mqtt-forwarder.git" | awk -F/ '{print $NF}' | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n1)
+          #MQTT_FORWARDER_VERSION=$(curl -s "https://git.ypbind.de/cgit/mqtt-forwarder/refs/" | grep -oE '/tag/\?h=[0-9]+\.[0-9]+\.[0-9]+' | sed -E 's|.*/tag/\?h=([0-9]+\.[0-9]+\.[0-9]+)|\1|' | sort -V | tail -n1)
           MQTT_FORWARDER_VERSION="1.1.1"
           echo "mqtt_forwarder_version=${MQTT_FORWARDER_VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         id: qemu
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v3
         with:
           image: tonistiigi/binfmt:latest
           platforms: all
 
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -80,7 +82,7 @@ jobs:
           password: ${{ secrets.REDHAT_QUAY_PASSWORD }}
 
       - name: Build
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
@@ -93,11 +95,12 @@ jobs:
             VERSION=${{steps.script.outputs.mqtt_forwarder_version}}
           tags: |
             docker.io/${{steps.script.outputs.docker_repo}}:mqtt-forwarder
+            docker.io/${{steps.script.outputs.docker_repo}}:mqtt-forwarder-${{steps.script.outputs.mqtt_forwarder_version}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:mqtt-forwarder
             ghcr.io/${{steps.script.outputs.github_repo}}:mqtt-forwarder
 
       #- name: Docker Hub Description
-      #  uses: peter-evans/dockerhub-description@v3
+      #  uses: peter-evans/dockerhub-description@v4
       #  with:
       #    username: ${{ secrets.DOCKER_USERNAME }}
       #    password: ${{ secrets.DOCKER_PASSWORD }}

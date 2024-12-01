@@ -16,8 +16,7 @@ RUN \
     go build -o ${GOPATH}/bin/mqtt-forwarder . ; \
     ${GOPATH}/bin/mqtt-forwarder --version
 
-#FROM alpine:latest
-FROM scratch
+FROM scratch AS production
 ARG VCS_REF
 ARG BUILD_DATE
 ARG VERSION
@@ -31,7 +30,6 @@ LABEL org.opencontainers.image.title="mqtt-forwarder" \
       org.opencontainers.image.licenses="GPL-3.0" \
       org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
       org.opencontainers.image.source="https://git.ypbind.de/cgit/mqtt-forwarder/"
-#RUN apk add --no-cache ca-certificates
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 COPY --from=builder --chown=1000:1000 /go/bin/mqtt-forwarder /usr/local/bin/mqtt-forwarder
 COPY --from=builder --chown=1000:1000 /go/src/mqtt-forwarder/example/config.ini /etc/mqtt-forwarder/config.ini

@@ -110,7 +110,7 @@ COPY <<EOF /etc/mqtt-forwarder/config.json
 EOF
 
 
-FROM alpine:latest
+FROM alpine:latest AS production
 
 ARG VCS_REF
 ARG BUILD_DATE
