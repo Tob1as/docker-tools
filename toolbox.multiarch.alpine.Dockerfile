@@ -48,6 +48,7 @@ RUN \
         micro \
         socat \
         oath-toolkit-oathtool \
+        msmtp \
     ; \
     echo ">> Tools installed!"
 
