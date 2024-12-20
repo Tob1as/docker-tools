@@ -43,7 +43,7 @@ USER nobody
 
 ENV HOST=0.0.0.0 PORT=3040
 
-EXPOSE 3040
+EXPOSE 3040/tcp
 
 ENTRYPOINT ["/usr/local/bin/vwmetrics"]
 #CMD ["--help"]
