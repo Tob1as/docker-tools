@@ -18,7 +18,6 @@ Tools/Tags:
 * [`easy-rsa`](#easy-rsa)
 * [`figlet`](#figlet)
 * [`htpasswd`](#htpasswd)
-* [`irc-exporter`](#)
 * [`keepalived`](#)
 * [`kiwiirc`](#)
 * [`mqtt-board`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-board.yml)
@@ -34,8 +33,10 @@ Tools/Tags:
   * [`toolbox`](#toolbox)
   * [`toolbox-extended`](#toolbox)
 * Deprecated:
-  * [`adminer`](#)
-  * [`pgadmin4`](#)
+  * [`adminer`](#) - Use now `adminerevo`!
+  * [`pgadmin4`](https://www.pgadmin.org/download/pgadmin-4-container/) - Use now offical Docker build!
+  * [`irc-exporter`](https://github.com/dgl/ircd_exporter) - Use now offical Docker build!
+  * [`vwmetrics`](https://github.com/Tricked-dev/vwmetrics) - Use now offical Docker build!
 
 ## figlet 
 
