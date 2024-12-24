@@ -29,7 +29,7 @@ jobs:
         run: |
           BUILD_DATE="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           BUILD_DATE_NUMERIC="${BUILD_DATE//[^[:digit:]]/}"
-          COMMIT_HASH=${GITHUB_SHA::8}
+          COMMIT_HASH=${GITHUB_SHA::7}
           GITHUB_REPO=${GITHUB_REPOSITORY,,}
           GITHUB_REPO_SHORT=${GITHUB_REPO#*/}
           GITHUB_REPO_SHORT=${GITHUB_REPO_SHORT#"docker-"}
