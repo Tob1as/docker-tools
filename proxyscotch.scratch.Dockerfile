@@ -2,6 +2,9 @@ FROM golang:alpine AS builder
 
 ARG VERSION
 
+ENV GOPATH=/go
+ENV CGO_ENABLED=0
+
 SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 
 WORKDIR /go/src/proxyscotch
@@ -12,7 +15,8 @@ RUN apk add --no-cache git ; \
     VERSION=${VERSION:-$(wget -qO- https://api.github.com/repos/hoppscotch/proxyscotch/releases/latest | grep 'tag_name' | cut -d\" -f4)} ; \
     echo "Proxyscotch Version = ${VERSION}" ; \
     git clone --branch "${VERSION}" --single-branch https://github.com/hoppscotch/proxyscotch.git . ; \
-    export $(grep -v '^#' version.properties | xargs) ; \
+    #rm go.mod go.sum && go mod init github.com/hoppscotch/proxyscotch && go mod tidy ; \
+    export $(grep -v '^#' ./version.properties | xargs) ; \
     # https://github.com/hoppscotch/proxyscotch/blob/master/build.sh#L217
     GOOS="$(go env GOOS)" GOARCH="$(go env GOARCH)" go build -ldflags "-X main.VersionName=$VERSION_NAME -X main.VersionCode=$VERSION_CODE" -o "${GOPATH}/bin/proxyscotch" server/server.go ; \
     proxyscotch --help
