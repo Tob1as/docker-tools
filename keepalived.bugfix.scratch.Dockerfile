@@ -1,4 +1,4 @@
-# docker build --no-cache --progress=plain --build-arg VERSION=v2.3.1 -t tobi312/tools:keepalived -f keepalived.scratch.Dockerfile .
+# docker build --no-cache --progress=plain --build-arg VERSION=v2.3.2 -t tobi312/tools:keepalived -f keepalived.scratch.Dockerfile .
 # https://github.com/acassen/keepalived/issues/2107#issuecomment-1049725208
 # hadolint ignore=DL3007
 FROM alpine:latest AS builder
@@ -10,6 +10,7 @@ SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 # hadolint ignore=DL3018,DL3003,SC2164
 RUN \
     apk add --no-cache --virtual .build-deps \
+      bash \  
       autoconf \
       automake \
       binutils \
@@ -36,9 +37,11 @@ RUN \
     #wget -q https://keepalived.org/software/keepalived-${VERSION}.tar.gz -O keepalived-${VERSION}.tar.gz && tar -zxf keepalived-${VERSION}.tar.gz && rm keepalived-${VERSION}.tar.gz ; \
     mv keepalived-${VERSION}/ keepalived/ ; \
     cd keepalived/ ; \
+    # only next line and bash installation/command is bugfix https://github.com/acassen/keepalived/issues/2503#issuecomment-2466298295
+    sed -i 's/#include <linux\/if_ether.h>//' keepalived/vrrp/vrrp.c ; \
     ./autogen.sh ; \
     CFLAGS='-static -s' LDFLAGS=-static \
-    ./configure ; \
+    /bin/bash ./configure ; \
     make && make DESTDIR=/install_root install ; \
     find /install_root ; \
     rm -rf /install_root/usr/share

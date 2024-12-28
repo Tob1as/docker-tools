@@ -1,7 +1,10 @@
 # docker build --no-cache --progress=plain --build-arg VERSION=v2.3.1 -t tobi312/tools:keepalived-alpine -f keepalived.alpine.Dockerfile .
-FROM alpine:latest
+# hadolint ignore=DL3007
+FROM alpine:latest AS production
 
 ARG VERSION
+
+SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 
 ARG VCS_REF
 ARG BUILD_DATE
@@ -12,12 +15,13 @@ LABEL org.opencontainers.image.title="Keepalived" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.revision="${VCS_REF}" \
       org.opencontainers.image.description="Keepalived is a routing software written in C" \
-      org.opencontainers.image.documentation="https://keepalived.org/manpage.html , https://github.com/acassen/keepalived" \
+      org.opencontainers.image.documentation="https://keepalived.org/manpage.html" \
       org.opencontainers.image.base.name="docker.io/library/alpine:latest" \
       org.opencontainers.image.licenses="GPL-2.0" \
-      org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
-      org.opencontainers.image.source="https://github.com/Tob1as/docker-tools"
+      org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
+      org.opencontainers.image.source="https://github.com/acassen/keepalived"
 
+# hadolint ignore=DL3018,DL3003,SC2103
 RUN \
     apk add --no-cache --virtual .build-deps \
       autoconf \
