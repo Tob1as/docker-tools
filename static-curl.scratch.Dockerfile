@@ -2,7 +2,7 @@
 FROM alpine:latest AS static-curl
 
 # curl: https://github.com/stunnel/static-curl
-# (Alternatives: https://github.com/moparisthebest/static-curl/releases or https://github.com/perryflynn/static-binaries)
+# (Alternatives: https://github.com/tarampampam/curl-docker ,  https://github.com/moparisthebest/static-curl or https://github.com/perryflynn/static-binaries)
 
 ARG CURL_VERSION
 ARG CURL_LIBC="musl"
