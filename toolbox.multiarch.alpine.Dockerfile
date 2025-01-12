@@ -49,6 +49,7 @@ RUN \
         socat \
         oath-toolkit-oathtool \
         msmtp \
+        tar \
     ; \
     echo ">> Tools installed!"
 

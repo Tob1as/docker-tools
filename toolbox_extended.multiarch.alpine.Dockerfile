@@ -44,7 +44,8 @@ RUN apk add --no-cache \
         openssh-client \
         rsync \
         sshpass \
-        libc6-compat \ 
+        libc6-compat \
+        #tar \
     ; \
     aws --version ; \
     smbclient --version ; \
@@ -54,12 +55,14 @@ RUN apk add --no-cache \
     if [ "$ARCH" == "x86_64" ]; then \
         echo "AZCopy: install on x86_64 (amd64) arch" ; \
         # AzCopy need libc6-compat, see https://github.com/Azure/azure-storage-azcopy/issues/621#issuecomment-538617518
-        wget -qO- https://aka.ms/downloadazcopy-v10-linux  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
+        #wget -qO- https://aka.ms/downloadazcopy-v10-linux  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
+        wget -qO- https://aka.ms/downloadazcopy-v10-linux  | tar --wildcards --no-anchored -xzf - -O '*/azcopy' > /usr/local/bin/azcopy ; chmod +x /usr/local/bin/azcopy ; \
         azcopy --version ; \
     elif [ "$ARCH" == "aarch64" ]; then \
         echo "AZCopy: install on aarch64 (arm64) arch" && \
-        wget -qO- https://aka.ms/downloadazcopy-v10-linux-arm64  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
-        azcopy --version ; \
+        #wget -qO- https://aka.ms/downloadazcopy-v10-linux-arm64  | tar xfz - --strip-components=1 -C /usr/local/bin/ ; chmod +x /usr/local/bin/azcopy ; \
+        wget -qO- https://aka.ms/downloadazcopy-v10-linux-arm64  | tar --wildcards --no-anchored -xzf - -O '*/azcopy' > /usr/local/bin/azcopy ; chmod +x /usr/local/bin/azcopy ; \
+        #azcopy --version ; \
     else \
         echo "AZCopy: unsupported arch" ; \
     fi ; \ 
