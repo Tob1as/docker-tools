@@ -37,7 +37,7 @@ COPY --from=redis:alpine /usr/local/bin/redis-cli /usr/local/bin/redis-cli
 #    echo ">> Databse-Tools Part 3 (via COPY) installed!"
 	
 # Storage Tools	
-#COPY --from=tobi312/tools:azcopy /azcopy /usr/local/bin/azcopy
+#COPY --from=tobi312/tools:azcopy /usr/local/bin/azcopy /usr/local/bin/azcopy
 RUN apk add --no-cache \
         aws-cli \
         samba-client \
