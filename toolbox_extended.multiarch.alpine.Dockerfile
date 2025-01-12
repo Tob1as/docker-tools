@@ -5,7 +5,7 @@ FROM ghcr.io/tob1as/docker-tools:toolbox
 # Database Tools	
 RUN apk add --no-cache \
         mariadb-client mariadb-backup \
-        postgresql14-client postgresql15-client postgresql16-client \
+        postgresql15-client postgresql16-client postgresql17-client \
         mongodb-tools \
         mosquitto-clients \
     ; \
