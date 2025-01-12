@@ -41,9 +41,9 @@ COPY --from=redis:alpine /usr/local/bin/redis-cli /usr/local/bin/redis-cli
 RUN apk add --no-cache \
         aws-cli \
         samba-client \
-        openssh-client \
-        rsync \
-        sshpass \
+        #openssh-client \
+        #rsync \
+        #sshpass \
         libc6-compat \
         #tar \
     ; \
