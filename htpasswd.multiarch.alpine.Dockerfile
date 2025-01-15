@@ -1,10 +1,10 @@
 # build: docker build --no-cache --progress=plain -t tobi312/tools:htpasswd -f htpasswd.multiarch.alpine.Dockerfile .
 
-FROM alpine:latest as builder
+FROM alpine:latest AS builder
 RUN apk add --no-cache apache2-utils
 
 
-FROM alpine:latest
+FROM alpine:latest AS production
 
 SHELL ["/bin/sh", "-euxo", "pipefail", "-c"]
 

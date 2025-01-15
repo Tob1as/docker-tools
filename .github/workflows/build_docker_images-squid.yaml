@@ -112,13 +112,14 @@ jobs:
           password: ${{ secrets.REDHAT_QUAY_PASSWORD }}
 
       - name: Build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./squid.alpine.Dockerfile
-          platforms: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm/v6
+          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6,linux/ppc64le,linux/riscv64,linux/s390x,linux/386
           push: true
+          #target: production
           build-args: |
             BUILD_DATE=${{steps.script.outputs.build_date}}
             VCS_REF=${{steps.script.outputs.commit_hash}}
@@ -126,12 +127,3 @@ jobs:
             ${{steps.script.outputs.git_url}}/${{steps.script.outputs.git_repo}}:squid
             docker.io/${{steps.script.outputs.docker_repo}}:squid
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:squid
-
-      #- name: Docker Hub Description
-      #  uses: peter-evans/dockerhub-description@v3
-      #  with:
-      #    username: ${{ secrets.DOCKER_USERNAME }}
-      #    password: ${{ secrets.DOCKER_PASSWORD }}
-      #    repository: ${{steps.script.outputs.docker_repo}}
-      #    short-description: ${{ github.event.repository.description }}
-      #    readme-filepath: README.md

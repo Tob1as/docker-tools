@@ -1,5 +1,5 @@
 # build: docker build --no-cache --progress=plain -t tobi312/tools:squid -f squid.alpine.Dockerfile .
-FROM alpine:latest
+FROM alpine:latest AS production
 
 ARG VCS_REF
 ARG BUILD_DATE

@@ -1,4 +1,5 @@
-FROM alpine:latest
+# build: docker build --no-cache --progress=plain -t tobi312/tools:easy-rsa -f easy-rsa.multiarch.alpine.Dockerfile .
+FROM alpine:latest AS production
 
 SHELL ["/bin/sh", "-euxo", "pipefail", "-c"]
 
