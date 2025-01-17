@@ -1,7 +1,6 @@
 # build: docker build --no-cache --progress=plain -t tobi312/tools:autossh -f autossh.alpine.Dockerfile .
+# hadolint ignore=DL3007
 FROM alpine:latest AS production
-
-SHELL ["/bin/sh", "-euxo", "pipefail", "-c"]
 
 ARG VCS_REF
 ARG BUILD_DATE
@@ -26,12 +25,12 @@ ENV \
     AUTOSSH_LOGLEVEL=0 \
     AUTOSSH_LOGFILE=/dev/stdout
 
-RUN \
-    apk --no-cache add \
-    autossh \
-    openssh-client
+# hadolint ignore=DL3018
+RUN apk --no-cache add \
+        autossh \
+        openssh-client
 	
 #USER nobody
 
-ENTRYPOINT ["/bin/sh", "-c"]
-#CMD ["/usr/bin/autossh -V"]
+ENTRYPOINT ["/usr/bin/autossh"]
+#CMD ["--help"]
