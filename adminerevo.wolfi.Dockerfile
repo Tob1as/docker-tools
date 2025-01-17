@@ -1,8 +1,11 @@
-#FROM ghcr.io/shyim/adminerevo:latest
-FROM shyim/adminerevo:latest
+# build: docker build --no-cache --progress=plain -t tobi312/tools:adminerevo -f adminerevo.wolfi.Dockerfile .
+# hadolint ignore=DL3007
+FROM ghcr.io/shyim/adminerevo:latest AS production
 
 ARG VCS_REF
 ARG BUILD_DATE
+
+SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 
 LABEL org.opencontainers.image.title="AdminerEvo" \
     #org.opencontainers.image.authors="AdminerEvo community" \
@@ -18,8 +21,8 @@ LABEL org.opencontainers.image.title="AdminerEvo" \
 # switch user
 USER root
 
-RUN set -x ; \
-    PHP_VERSION=$(php -v | awk '/^PHP/ {print $2}' | cut -d'.' -f1,2) ; \
+# hadolint ignore=DL3018,SC2086
+RUN PHP_VERSION=$(php -v | awk '/^PHP/ {print $2}' | cut -d'.' -f1,2) ; \
     installPackages=" \
         php-${PHP_VERSION}-pecl-mongodb \
         #php-${PHP_VERSION}-pecl-sqlsrv \
