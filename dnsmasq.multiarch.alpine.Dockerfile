@@ -1,7 +1,6 @@
 # build: docker build --no-cache --progress=plain -t tobi312/tools:dnsmasq -f dnsmasq.multiarch.alpine.Dockerfile .
+# hadolint ignore=DL3007
 FROM alpine:latest AS production
-
-SHELL ["/bin/sh", "-euxo", "pipefail", "-c"]
 
 ARG VCS_REF
 ARG BUILD_DATE
@@ -18,6 +17,7 @@ LABEL org.opencontainers.image.title="dnsmasq" \
       org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
       org.opencontainers.image.source="https://github.com/Tob1as/docker-tools"
 
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
         tzdata \
         #dnsmasq \
