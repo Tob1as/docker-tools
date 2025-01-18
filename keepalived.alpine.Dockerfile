@@ -21,7 +21,7 @@ LABEL org.opencontainers.image.title="Keepalived" \
       org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
       org.opencontainers.image.source="https://github.com/acassen/keepalived"
 
-# hadolint ignore=DL3018,DL3003,SC2103
+# hadolint ignore=DL3018,DL3003,SC2103,SC2164
 RUN \
     apk add --no-cache --virtual .build-deps \
       autoconf \

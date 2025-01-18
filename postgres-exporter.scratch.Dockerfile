@@ -5,7 +5,7 @@ ARG VERSION
 
 SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 
-# hadolint ignore=SC2086
+# hadolint ignore=SC2086,SC2015,SC2169
 RUN \
     OS="$(go env GOOS)" ; \
     ARCH="$(go env GOARCH)" ; \

@@ -17,24 +17,24 @@ RUN \
       ca-certificates \
       #curl \
    ; \
-   ARCH=`uname -m` ; \
+   ARCH=$(uname -m) ; \
 	echo "ARCH=$ARCH" ; \
-   if [ "$ARCH" == "x86_64" ]; then \
+   if [ "$ARCH" = "x86_64" ]; then \
       echo "x86_64 (amd64)" ; \
       TARGETARCH="$ARCH"; \
-   elif [ "$ARCH" == "aarch64" ]; then \
+   elif [ "$ARCH" = "aarch64" ]; then \
       echo "aarch64 (arm64)" ; \
       TARGETARCH="$ARCH"; \
-   elif [ "$ARCH" == "armv7l" ]; then \
+   elif [ "$ARCH" = "armv7l" ]; then \
       echo "armv7 (arm)" ; \
       TARGETARCH="armv7"; \
-   elif [ "$ARCH" == "riscv64" ]; then \
+   elif [ "$ARCH" = "riscv64" ]; then \
       echo "riscv64" ; \
       TARGETARCH="$ARCH"; \
-   elif [ "$ARCH" == "ppc64le" ]; then \
+   elif [ "$ARCH" = "ppc64le" ]; then \
       echo "ppc64le" ; \
       TARGETARCH="powerpc64le"; \
-   elif [ "$ARCH" == "s390x" ]; then \
+   elif [ "$ARCH" = "s390x" ]; then \
       echo "s390x" ; \
       TARGETARCH="$ARCH"; \
    else \
