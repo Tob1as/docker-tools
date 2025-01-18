@@ -102,12 +102,3 @@ jobs:
             docker.io/${{steps.script.outputs.docker_repo}}:static-curl-${{steps.script.outputs.curl_version}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:static-curl
             ${{steps.script.outputs.git_url}}/${{steps.script.outputs.git_repo}}:static-curl
-
-      #- name: Docker Hub Description
-      #  uses: peter-evans/dockerhub-description@v4
-      #  with:
-      #    username: ${{ secrets.DOCKER_USERNAME }}
-      #    password: ${{ secrets.DOCKER_PASSWORD }}
-      #    repository: ${{steps.script.outputs.docker_repo}}
-      #    short-description: ${{ github.event.repository.description }}
-      #    readme-filepath: README.md

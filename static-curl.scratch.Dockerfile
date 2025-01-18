@@ -1,14 +1,18 @@
-# build: docker build --no-cache --progress=plain --build-arg CURL_VERSION=8.11.0 -t tobi312/tools:static-curl -f static-curl.scratch.Dockerfile .
+# build: docker build --no-cache --progress=plain --build-arg CURL_VERSION=8.11.1 -t tobi312/tools:static-curl -f static-curl.scratch.Dockerfile .
+# hadolint ignore=DL3007
 FROM alpine:latest AS static-curl
 
 # curl: https://github.com/stunnel/static-curl
 # (Alternatives: https://github.com/tarampampam/curl-docker ,  https://github.com/moparisthebest/static-curl or https://github.com/perryflynn/static-binaries)
 
+SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
+
 ARG CURL_VERSION
 ARG CURL_LIBC="musl"
 
+# hadolint ignore=DL3018,SC2086
 RUN \
-   set -ex ; \
+   #set -ex ; \
    apk add --no-cache \
       ca-certificates \
       #curl \
@@ -45,7 +49,7 @@ RUN \
    wget -qO- https://github.com/stunnel/static-curl/releases/download/${CURL_VERSION}/curl-linux-${TARGETARCH}-${CURL_LIBC}-${CURL_VERSION}.tar.xz  | tar -xJ -C /usr/local/bin/ curl ; \
    /usr/local/bin/curl --version
 
-FROM scratch
+FROM scratch AS production
 
 ARG CURL_VERSION
 ARG VCS_REF
