@@ -9,6 +9,7 @@ SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 RUN \
     OS="$(go env GOOS)" ; \
     ARCH="$(go env GOARCH)" ; \
+    [ "$ARCH" = "arm" ] && ARCH="armv7" || true ; \
     echo "OS=${OS} ARCH=${ARCH}" ; \
     VERSION=${VERSION:-$(wget -qO- https://api.github.com/repos/prometheus-community/postgres_exporter/releases/latest | grep 'tag_name' | cut -d\" -f4 | head -1)} ; \
     echo "VERSION=${VERSION}" ; \
