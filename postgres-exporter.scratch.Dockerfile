@@ -1,4 +1,4 @@
-# docker build --no-cache --progress=plain --build-arg VERSION=v0.15.0 -t tobi312/tools:postgres-exporter -f postgres-exporter.scratch.Dockerfile .
+# docker build --no-cache --progress=plain --build-arg VERSION=v0.16.0 -t tobi312/tools:postgres-exporter -f postgres-exporter.scratch.Dockerfile .
 FROM golang:alpine AS builder
 
 ARG VERSION
