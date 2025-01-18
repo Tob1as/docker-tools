@@ -1,4 +1,5 @@
 # build: docker build --no-cache --progress=plain -t tobi312/tools:squid -f squid.alpine.Dockerfile .
+# hadolint ignore=DL3007
 FROM alpine:latest AS production
 
 ARG VCS_REF
@@ -15,9 +16,8 @@ LABEL org.opencontainers.image.title="squid" \
       org.opencontainers.image.licenses="GPL-2.0" \
       org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
       org.opencontainers.image.source="https://github.com/Tob1as/docker-tools"
-	
-SHELL ["/bin/sh", "-euxo", "pipefail", "-c"]
 
+# hadolint ignore=DL3018
 RUN \
     apk add --no-cache \
         squid \
@@ -26,9 +26,9 @@ RUN \
         #squid-lang-de \
         #ca-certificates \
     ; \
-    echo -e "\npid_filename none" >> /etc/squid/squid.conf ; \
+    printf "\npid_filename none\n" >> /etc/squid/squid.conf ; \
     mkdir /etc/squid/conf.d/ ; \
-    echo -e "\ninclude /etc/squid/conf.d/*.conf" >> /etc/squid/squid.conf ; \
+    printf "\ninclude /etc/squid/conf.d/*.conf\n" >> /etc/squid/squid.conf ; \
     touch /etc/squid/conf.d/empty.conf ; \
     echo ">> squid installed!"
 

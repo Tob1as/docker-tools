@@ -1,7 +1,6 @@
 # build: docker build --no-cache --progress=plain -t tobi312/tools:mqtt-client -f mqtt-client.alpine.Dockerfile .
+# hadolint ignore=DL3007
 FROM alpine:latest AS production
-
-SHELL ["/bin/sh", "-euxo", "pipefail", "-c"]
 
 ARG VCS_REF
 ARG BUILD_DATE
@@ -14,10 +13,11 @@ LABEL org.opencontainers.image.title="MQTT-Client" \
       org.opencontainers.image.description="Mosquitto Clients for sub/pub data" \
       org.opencontainers.image.documentation="https://mosquitto.org/man/mosquitto_sub-1.html,https://mosquitto.org/man/mosquitto_pub-1.html" \
       org.opencontainers.image.base.name="docker.io/library/alpine:latest" \
-      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.licenses="EPL-1.0 OR EPL-2.0 " \
       org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
       org.opencontainers.image.source="https://github.com/Tob1as/docker-tools"
 
+# hadolint ignore=DL3018
 RUN apk add --no-cache \
         ca-certificates \
         tzdata \

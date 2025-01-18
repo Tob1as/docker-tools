@@ -1,28 +1,15 @@
 # docker build --no-cache --progress=plain --build-arg VERSION=v0.15.0 -t tobi312/tools:postgres-exporter -f postgres-exporter.scratch.Dockerfile .
-FROM alpine:latest as builder
+FROM golang:alpine AS builder
 
 ARG VERSION
-# v0.15.0
-ARG OS="linux"
-#ARG ARCH="amd64"
 
+SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
+
+# hadolint ignore=SC2086
 RUN \
-    ARCH=`uname -m` ; \
-    echo "ARCH=$ARCH" ; \
-    if [ "$ARCH" == "x86_64" ]; then \
-        ARCH="amd64"; \
-    elif [ "$ARCH" == "aarch64" ]; then \
-        ARCH="arm64"; \
-    elif [ "$ARCH" == "armv7l" ]; then \
-        ARCH="armv7"; \
-    elif [ "$ARCH" == "armv6l" ]; then \
-        ARCH="armv6"; \
-    else \
-        echo "unknown arch" && \
-        exit 1; \
-    fi ; \ 
-    echo "ARCH=$ARCH" ; \
-    \
+    OS="$(go env GOOS)" ; \
+    ARCH="$(go env GOARCH)" ; \
+    echo "OS=${OS} ARCH=${ARCH}" ; \
     VERSION=${VERSION:-$(wget -qO- https://api.github.com/repos/prometheus-community/postgres_exporter/releases/latest | grep 'tag_name' | cut -d\" -f4 | head -1)} ; \
     echo "VERSION=${VERSION}" ; \
     wget -qO- https://github.com/prometheus-community/postgres_exporter/releases/download/${VERSION}/postgres_exporter-${VERSION:1}.${OS}-${ARCH}.tar.gz | tar xvz -C /tmp ; \
@@ -30,7 +17,7 @@ RUN \
     chmod +x /tmp/postgres_exporter/postgres_exporter ; \
     ls -lah /tmp/postgres_exporter
 
-FROM scratch
+FROM scratch AS production
 
 ARG VERSION
 ARG VCS_REF
@@ -48,9 +35,10 @@ LABEL org.opencontainers.image.title="Prometheus PostgreSQL Exporter" \
       org.opencontainers.image.url="https://github.com/Tob1as/docker-tools" \
       org.opencontainers.image.source="https://github.com/prometheus-community/postgres_exporter"
 
-COPY --from=builder --chown=100:100 /tmp/postgres_exporter/postgres_exporter /usr/local/bin/postgres_exporter
+COPY --from=builder --chown=65534:65534 /tmp/postgres_exporter/postgres_exporter /bin/postgres_exporter
 
 EXPOSE 9187/tcp
-USER 100:100
-ENTRYPOINT [ "postgres_exporter" ]
+# user: nobody
+USER 65534
+ENTRYPOINT [ "/bin/postgres_exporter" ]
 #CMD ["--help"]
