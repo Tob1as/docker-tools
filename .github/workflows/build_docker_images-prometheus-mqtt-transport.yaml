@@ -98,12 +98,3 @@ jobs:
             docker.io/${{steps.script.outputs.docker_repo}}:prometheus-mqtt-transport-${{steps.script.outputs.prometheus_mqtt_transport_version}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:prometheus-mqtt-transport
             ghcr.io/${{steps.script.outputs.github_repo}}:prometheus-mqtt-transport
-
-      #- name: Docker Hub Description
-      #  uses: peter-evans/dockerhub-description@v4
-      #  with:
-      #    username: ${{ secrets.DOCKER_USERNAME }}
-      #    password: ${{ secrets.DOCKER_PASSWORD }}
-      #    repository: ${{steps.script.outputs.docker_repo}}
-      #    short-description: ${{ github.event.repository.description }}
-      #    readme-filepath: README.md

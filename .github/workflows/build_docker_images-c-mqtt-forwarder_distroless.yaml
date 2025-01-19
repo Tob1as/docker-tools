@@ -98,12 +98,3 @@ jobs:
             docker.io/${{steps.script.outputs.docker_repo}}:c-mqtt-forwarder-${{steps.script.outputs.c_mqtt_forwarder_version}}-distroless
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:c-mqtt-forwarder-distroless
             ghcr.io/${{steps.script.outputs.github_repo}}:c-mqtt-forwarder-distroless
-
-      #- name: Docker Hub Description
-      #  uses: peter-evans/dockerhub-description@v4
-      #  with:
-      #    username: ${{ secrets.DOCKER_USERNAME }}
-      #    password: ${{ secrets.DOCKER_PASSWORD }}
-      #    repository: ${{steps.script.outputs.docker_repo}}
-      #    short-description: ${{ github.event.repository.description }}
-      #    readme-filepath: README.md
