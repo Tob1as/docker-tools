@@ -36,6 +36,7 @@ RUN apk add --no-cache \
     curl \
     git
 
+# https://www.openssh.com/ + https://github.com/openssh/openssh-portable
 RUN curl -LO https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OPENSSH_VERSION.tar.gz && \
     tar xzf openssh-$OPENSSH_VERSION.tar.gz && \
     cd openssh-$OPENSSH_VERSION && \
@@ -50,7 +51,8 @@ RUN curl -LO https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OPENS
     install -m 755 scp $PREFIX/scp && \
     install -m 755 ssh-keygen $PREFIX/ssh-keygen && \
     install -m 755 ssh-keyscan $PREFIX/ssh-keyscan
-	
+
+# https://sourceforge.net/projects/sshpass/
 RUN curl -LO http://sourceforge.net/projects/sshpass/files/sshpass-$SSHPASS_VERSION.tar.gz && \
     tar xzf sshpass-$SSHPASS_VERSION.tar.gz && \
     cd sshpass-$SSHPASS_VERSION && \
@@ -62,7 +64,7 @@ RUN curl -LO http://sourceforge.net/projects/sshpass/files/sshpass-$SSHPASS_VERS
     strip sshpass && \
     install -m 755 sshpass $PREFIX/sshpass
 
-# xxhash(-static) need for rsync
+# https://cyan4973.github.io/xxHash/  (xxhash(-static) need for rsync)
 RUN curl -LO https://github.com/Cyan4973/xxHash/archive/refs/tags/v${XXHASH_VERSION}.tar.gz && \
     tar xzf v${XXHASH_VERSION}.tar.gz && \
     cd xxHash-${XXHASH_VERSION} && \
@@ -70,6 +72,7 @@ RUN curl -LO https://github.com/Cyan4973/xxHash/archive/refs/tags/v${XXHASH_VERS
     make install PREFIX=/usr/local && \
     cd .. && rm -rf xxHash-${XXHASH_VERSION} v${XXHASH_VERSION}.tar.gz
 
+# https://rsync.samba.org/ + https://github.com/RsyncProject/rsync
 RUN curl -LO https://download.samba.org/pub/rsync/src/rsync-$RSYNC_VERSION.tar.gz && \
     tar xzf rsync-$RSYNC_VERSION.tar.gz && \
     cd rsync-$RSYNC_VERSION && \
@@ -82,9 +85,8 @@ RUN curl -LO https://download.samba.org/pub/rsync/src/rsync-$RSYNC_VERSION.tar.g
     strip rsync && \
     install -m 755 rsync $PREFIX/rsync
 
-RUN \ 
-    #git clone --branch main --single-branch https://github.com/Autossh/autossh.git && \
-    curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz && \
+# https://www.harding.motd.ca/autossh/
+RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz && \
     tar xzf autossh-${AUTOSSH_VERSION}.tgz && mv autossh-${AUTOSSH_VERSION} autossh && \
     \
     cd autossh && \
