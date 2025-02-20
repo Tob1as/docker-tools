@@ -14,18 +14,21 @@ SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 WORKDIR /usr/src
 
 RUN apk add --no-cache \
+    curl \
+    git \
+    linux-headers \
     build-base \
     musl-dev \
     gcc \
     make \
+    autoconf \
+    automake \
+    libtool \
+    #openssh-client \
     openssl-dev \
     openssl-libs-static \
     zlib-dev \
     zlib-static \
-    linux-headers \
-    autoconf \
-    automake \
-    libtool \
     xxhash-dev \
     #xxhash-static \
     lz4-dev \
@@ -34,9 +37,7 @@ RUN apk add --no-cache \
     zstd-static \
     popt-dev \
     popt-static \
-    #openssh-client \
-    curl \
-    git
+    gnupg
 
 # https://www.openssh.com/ + https://github.com/openssh/openssh-portable
 RUN curl -LO https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OPENSSH_VERSION.tar.gz && \
@@ -92,9 +93,8 @@ RUN curl -LO https://download.samba.org/pub/rsync/src/rsync-$RSYNC_VERSION.tar.g
 
 # https://www.harding.motd.ca/autossh/
 RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz && \
-    tar xzf autossh-${AUTOSSH_VERSION}.tgz && mv autossh-${AUTOSSH_VERSION} autossh && \
-    \
-    cd autossh && \
+    tar xzf autossh-${AUTOSSH_VERSION}.tgz && \
+    cd autossh-${AUTOSSH_VERSION} && \
     VER=${AUTOSSH_VERSION:-$(grep '^VER=' Makefile.in | sed 's/VER=[ \t]*//')} && \
     echo "AUTOSSH_VER=$VER" && \
     ./configure \
