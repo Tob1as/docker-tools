@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain -t tobi312/tools:static-ssh-tools -f static-ssh-tools.Dockerfile .
+# build: docker build --no-cache --progress=plain -t tobi312/tools:static-ssh-tools -f static-ssh-tools.scratch.Dockerfile .
 FROM alpine:latest AS builder
 
 ARG OPENSSH_VERSION=9.9p2
