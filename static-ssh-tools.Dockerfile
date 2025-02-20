@@ -11,6 +11,8 @@ ENV PREFIX=/usr/local/bin
 
 SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 
+WORKDIR /usr/src
+
 RUN apk add --no-cache \
     build-base \
     musl-dev \
@@ -50,7 +52,8 @@ RUN curl -LO https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OPENS
     install -m 755 sftp $PREFIX/sftp && \
     install -m 755 scp $PREFIX/scp && \
     install -m 755 ssh-keygen $PREFIX/ssh-keygen && \
-    install -m 755 ssh-keyscan $PREFIX/ssh-keyscan
+    install -m 755 ssh-keyscan $PREFIX/ssh-keyscan && \
+    cd ..
 
 # https://sourceforge.net/projects/sshpass/
 RUN curl -LO http://sourceforge.net/projects/sshpass/files/sshpass-$SSHPASS_VERSION.tar.gz && \
@@ -62,7 +65,8 @@ RUN curl -LO http://sourceforge.net/projects/sshpass/files/sshpass-$SSHPASS_VERS
     && \
     make -j$(nproc) && \
     strip sshpass && \
-    install -m 755 sshpass $PREFIX/sshpass
+    install -m 755 sshpass $PREFIX/sshpass && \
+    cd ..
 
 # https://cyan4973.github.io/xxHash/  (xxhash(-static) need for rsync)
 RUN curl -LO https://github.com/Cyan4973/xxHash/archive/refs/tags/v${XXHASH_VERSION}.tar.gz && \
@@ -83,7 +87,8 @@ RUN curl -LO https://download.samba.org/pub/rsync/src/rsync-$RSYNC_VERSION.tar.g
     && \
     make -j$(nproc) && \
     strip rsync && \
-    install -m 755 rsync $PREFIX/rsync
+    install -m 755 rsync $PREFIX/rsync && \
+    cd ..
 
 # https://www.harding.motd.ca/autossh/
 RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz && \
@@ -99,7 +104,10 @@ RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz 
     && \
     make CFLAGS="-static -DVER=\\\"$VER\\\"" && \
     strip autossh && \
-    install -m 755 autossh $PREFIX/autossh
+    install -m 755 autossh $PREFIX/autossh && \
+    cd ..
+
+RUN ls -lah
 
 
 FROM scratch AS production
