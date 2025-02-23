@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain -t tobi312/tools:static-ssh-tools -f static-ssh-tools.scratch.Dockerfile .
+# build: docker build --no-cache --progress=plain --target production -t tobi312/tools:static-ssh-tools -f static-ssh-tools.scratch.Dockerfile .
 FROM alpine:latest AS builder
 
 ARG OPENSSH_VERSION=9.9p2
@@ -100,7 +100,8 @@ RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz 
     ./configure \
         CC=gcc \
         CFLAGS="-static -D__progname=__autossh_progname" \
-        LDFLAGS="-static" --with-ssh=/usr/local/bin/ssh \
+        LDFLAGS="-static" \
+        --with-ssh=/usr/local/bin/ssh \
     && \
     make CFLAGS="-static -DVER=\\\"$VER\\\"" && \
     strip autossh && \
@@ -109,8 +110,28 @@ RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz 
 
 RUN ls -lah
 
+FROM busybox:stable-uclibc AS debug
+
+ARG VCS_REF
+ARG BUILD_DATE
+
+LABEL org.opencontainers.image.title="Static SSH Tools"\
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.source="https://github.com/Tob1as/docker-tools/"
+
+COPY --from=builder /usr/local/bin/ssh /usr/local/bin/ssh
+COPY --from=builder /usr/local/bin/sftp /usr/local/bin/sftp
+COPY --from=builder /usr/local/bin/scp /usr/local/bin/scp
+COPY --from=builder /usr/local/bin/ssh-keygen /usr/local/bin/ssh-keygen
+COPY --from=builder /usr/local/bin/ssh-keyscan /usr/local/bin/ssh-keyscan
+COPY --from=builder /usr/local/bin/sshpass /usr/local/bin/sshpass
+COPY --from=builder /usr/local/bin/rsync /usr/local/bin/rsync
+COPY --from=builder /usr/local/bin/autossh /usr/local/bin/autossh
 
 FROM scratch AS production
+
+ARG VCS_REF
+ARG BUILD_DATE
 
 LABEL org.opencontainers.image.title="Static SSH Tools" \
       #org.opencontainers.image.vendor="" \
