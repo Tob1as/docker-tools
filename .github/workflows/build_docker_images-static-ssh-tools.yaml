@@ -1,16 +1,16 @@
 name: 'build docker images: static SSH Tools'
 
 on:
-  #push:
-  #  branches:
-  #    - 'main'
-  #    - 'master'
-  #  paths:
-  #    - 'static-ssh-tools.scratch.Dockerfile'
-  #    - '.github/workflows/build_docker_images-static-ssh-tools.yaml'
+  push:
+    #branches:
+    #  - 'main'
+    #  - 'master'
+    paths:
+      - 'static-ssh-tools.scratch.Dockerfile'
+      - '.github/workflows/build_docker_images-static-ssh-tools.yaml'
   workflow_dispatch:
-  schedule:
-    - cron: '30 5 23 * *'  # At 05:30 on day-of-month 28.
+  #schedule:
+  #  - cron: '30 5 23 * *'  # At 05:30 on day-of-month 28.
 
 defaults:
   run:
