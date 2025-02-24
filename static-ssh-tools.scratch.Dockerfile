@@ -128,7 +128,7 @@ COPY --from=builder /usr/local/bin/sshpass /usr/local/bin/sshpass
 COPY --from=builder /usr/local/bin/rsync /usr/local/bin/rsync
 COPY --from=builder /usr/local/bin/autossh /usr/local/bin/autossh
 
-FROM scratch AS production
+FROM scratch AS binary
 
 ARG VCS_REF
 ARG BUILD_DATE

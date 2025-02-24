@@ -49,7 +49,7 @@ RUN \
    wget -qO- https://github.com/stunnel/static-curl/releases/download/${CURL_VERSION}/curl-linux-${TARGETARCH}-${CURL_LIBC}-${CURL_VERSION}.tar.xz  | tar -xJ -C /usr/local/bin/ curl ; \
    /usr/local/bin/curl --version
 
-FROM scratch AS production
+FROM scratch AS binary
 
 ARG CURL_VERSION
 ARG VCS_REF
