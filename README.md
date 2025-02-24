@@ -10,7 +10,6 @@ All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Cont
 * [`quay.io/tobi312/tools:<TAG>`](https://quay.io/repository/tobi312/tools)
 
 Tools/Tags:
-* [`adminerevo`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/adminerevo.yml)
 * [`autossh`](#)
 * [`azcopy`](#)
 * [`c-mqtt-forwarder`](#)
@@ -29,11 +28,13 @@ Tools/Tags:
 * [`proxyscotch`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/hoppscotch.yml)
 * [`squid`](#)
 * [`static-curl`](#)
+* [`static-ssh-tools`](#)
 * ToolBox:
   * [`toolbox`](#toolbox)
   * [`toolbox-extended`](#toolbox)
 * Deprecated:
-  * [`adminer`](#) - Use now `adminerevo`!
+  * [`adminer`](#)
+  * [`adminerevo`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/adminerevo.yml)
   * [`pgadmin4`](https://www.pgadmin.org/download/pgadmin-4-container/) - Use now offical Docker build!
   * [`irc-exporter`](https://github.com/dgl/ircd_exporter) - Use now offical Docker build!
   * [`vwmetrics`](https://github.com/Tricked-dev/vwmetrics) - Use now offical Docker build!
