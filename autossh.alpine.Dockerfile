@@ -52,7 +52,8 @@ RUN apk --no-cache add \
         autossh \
         openssh-client \
         sshpass \
-        mkdir /.ssh && chown nobody:nobody /.ssh && chmod 700 /.ssh
+    ; \
+    mkdir /.ssh && chown nobody:nobody /.ssh && chmod 700 /.ssh
 
 # User: nobody (65534)
 USER nobody
