@@ -34,7 +34,7 @@ ENV \
     # path to ssh if not default
     AUTOSSH_PATH=/usr/bin/ssh \
     # write pid to this file
-    AUTOSSH_PIDFILE=/var/run/autossh.pid \
+    AUTOSSH_PIDFILE=/tmp/autossh.pid \
     # how often to check the connection (seconds)
     #AUTOSSH_POLL=600 \
     # time before first connection check (seconds)
@@ -51,7 +51,8 @@ ENV \
 RUN apk --no-cache add \
         autossh \
         openssh-client \
-        sshpass
+        sshpass \
+        mkdir /.ssh && chown nobody:nobody /.ssh && chmod 700 /.ssh
 
 # User: nobody (65534)
 USER nobody
