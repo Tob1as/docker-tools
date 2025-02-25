@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain --target production -t tobi312/tools:static-ssh-tools -f static-ssh-tools.scratch.Dockerfile .
+# build: docker build --no-cache --progress=plain --target binary -t tobi312/tools:static-ssh-tools -f static-ssh-tools.scratch.Dockerfile .
 FROM alpine:latest AS builder
 
 ARG OPENSSH_VERSION=9.9p2
@@ -41,6 +41,9 @@ RUN apk add --no-cache \
 
 # https://www.openssh.com/ + https://github.com/openssh/openssh-portable
 RUN curl -LO https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OPENSSH_VERSION.tar.gz && \
+    #curl -Ls https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/RELEASE_KEY.asc | gpg --import && \
+    #curl -LO https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-$OPENSSH_VERSION.tar.gz.asc && \
+    #gpg --verify openssh-$OPENSSH_VERSION.tar.gz.asc openssh-$OPENSSH_VERSION.tar.gz && \
     tar xzf openssh-$OPENSSH_VERSION.tar.gz && \
     cd openssh-$OPENSSH_VERSION && \
     ./configure \
@@ -79,9 +82,13 @@ RUN curl -LO https://github.com/Cyan4973/xxHash/archive/refs/tags/v${XXHASH_VERS
 
 # https://rsync.samba.org/ + https://github.com/RsyncProject/rsync
 RUN curl -LO https://download.samba.org/pub/rsync/src/rsync-$RSYNC_VERSION.tar.gz && \
+    ##gpg --keyserver hkps://keys.openpgp.org --recv-keys 9FEF112DCE19A0DC7E882CB81BB24997A8535F6F && \
+    #curl -Ls "https://keys.openpgp.org/vks/v1/by-fingerprint/9FEF112DCE19A0DC7E882CB81BB24997A8535F6F" | gpg --import && \
+    #curl -LO https://download.samba.org/pub/rsync/src/rsync-$RSYNC_VERSION.tar.gz.asc && \
+    #gpg --verify rsync-$RSYNC_VERSION.tar.gz.asc rsync-$RSYNC_VERSION.tar.gz && \
     tar xzf rsync-$RSYNC_VERSION.tar.gz && \
     cd rsync-$RSYNC_VERSION && \
-    ./configure --help && \
+    #./configure --help && \
     ./configure \
         LDFLAGS="-static" \
         CFLAGS="-static" \
@@ -93,6 +100,9 @@ RUN curl -LO https://download.samba.org/pub/rsync/src/rsync-$RSYNC_VERSION.tar.g
 
 # https://www.harding.motd.ca/autossh/
 RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz && \
+    #curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.cksums && \
+    ##awk '/SHA256/ {print $4, "autossh-'$AUTOSSH_VERSION'.tgz"}' autossh-$AUTOSSH_VERSION.cksums | sha256sum -c - && \
+    #echo "$(grep 'SHA256' autossh-$AUTOSSH_VERSION.cksums | cut -d ' ' -f 4)  autossh-$AUTOSSH_VERSION.tgz" | sha256sum -c - && \
     tar xzf autossh-${AUTOSSH_VERSION}.tgz && \
     cd autossh-${AUTOSSH_VERSION} && \
     VER=${AUTOSSH_VERSION:-$(grep '^VER=' Makefile.in | sed 's/VER=[ \t]*//')} && \
@@ -101,7 +111,7 @@ RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz 
         CC=gcc \
         CFLAGS="-static -D__progname=__autossh_progname" \
         LDFLAGS="-static" \
-        --with-ssh=/usr/local/bin/ssh \
+        --with-ssh=$PREFIX/ssh \
     && \
     make CFLAGS="-static -DVER=\\\"$VER\\\"" && \
     strip autossh && \
