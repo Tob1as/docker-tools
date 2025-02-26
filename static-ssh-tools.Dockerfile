@@ -199,17 +199,15 @@ COPY --from=builder /usr/local/bin/autossh /usr/local/bin/autossh
 
 COPY <<EOF /etc/passwd
 root:x:0:0:root:/root:/usr/sbin/nologin
-nonroot:x:65532:65532:nonroot:/:/sbin/nologin
 nobody:x:65534:65534:nobody:/:/sbin/nologin
 EOF
 
 COPY <<EOF /etc/group
 root:x:0:root
-nonroot:x:65532:
 nobody:x:65534:
 EOF
 
-USER nobody:nobody
+#USER nobody:nobody
 
 #ENTRYPOINT ["ssh"]
 #ENTRYPOINT ["sftp"]
