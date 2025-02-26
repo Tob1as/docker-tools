@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain --target binary -t tobi312/tools:static-ssh-tools -f static-ssh-tools.scratch.Dockerfile .
+# build: docker build --no-cache --progress=plain --target binary -t tobi312/tools:static-ssh-tools -f static-ssh-tools.Dockerfile .
 FROM alpine:latest AS builder
 
 ARG OPENSSH_VERSION=9.9p2
@@ -7,7 +7,13 @@ ARG XXHASH_VERSION=0.8.3
 ARG RSYNC_VERSION=3.4.1
 ARG AUTOSSH_VERSION=1.4g
 
+ARG VCS_REF
+
 ENV PREFIX=/usr/local/bin
+
+LABEL org.opencontainers.image.title="Static SSH Tools"\
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.source="https://github.com/Tob1as/docker-tools/"
 
 SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 
@@ -120,10 +126,9 @@ RUN curl -LO https://www.harding.motd.ca/autossh/autossh-${AUTOSSH_VERSION}.tgz 
 
 RUN ls -lah
 
-FROM busybox:stable-uclibc AS debug
+FROM busybox:stable-uclibc AS debug-shell
 
 ARG VCS_REF
-ARG BUILD_DATE
 
 LABEL org.opencontainers.image.title="Static SSH Tools"\
       org.opencontainers.image.revision="${VCS_REF}" \
@@ -134,6 +139,33 @@ COPY --from=builder /usr/local/bin/sftp /usr/local/bin/sftp
 COPY --from=builder /usr/local/bin/scp /usr/local/bin/scp
 COPY --from=builder /usr/local/bin/ssh-keygen /usr/local/bin/ssh-keygen
 COPY --from=builder /usr/local/bin/ssh-keyscan /usr/local/bin/ssh-keyscan
+COPY --from=builder /usr/local/bin/sshpass /usr/local/bin/sshpass
+COPY --from=builder /usr/local/bin/rsync /usr/local/bin/rsync
+COPY --from=builder /usr/local/bin/autossh /usr/local/bin/autossh
+
+FROM gcr.io/distroless/static-debian12:nonroot AS production
+
+ARG VCS_REF
+ARG BUILD_DATE
+
+LABEL org.opencontainers.image.title="Static SSH Tools" \
+      #org.opencontainers.image.vendor="" \
+      org.opencontainers.image.authors="Tobias Hargesheimer <docker@ison.ws>" \
+      org.opencontainers.image.version="${VCS_REF}" \
+      org.opencontainers.image.created="${BUILD_DATE}" \
+      org.opencontainers.image.revision="${VCS_REF}" \
+      org.opencontainers.image.description="Static SSH Tools: SSH, SFTP, SCP, SSH-KEYGEN, SSHPASS, RSYNC and AUTOSSH." \
+      org.opencontainers.image.documentation="https://github.com/Tob1as/docker-tools/" \
+      org.opencontainers.image.base.name="gcr.io/distroless/static-debian12:nonroot" \
+      org.opencontainers.image.licenses="WTFPL" \
+      org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
+      org.opencontainers.image.source="https://github.com/Tob1as/docker-tools/"
+
+COPY --from=builder /usr/local/bin/ssh /usr/local/bin/ssh
+COPY --from=builder /usr/local/bin/sftp /usr/local/bin/sftp
+COPY --from=builder /usr/local/bin/scp /usr/local/bin/scp
+COPY --from=builder /usr/local/bin/ssh-keygen /usr/local/bin/ssh-keygen
+#COPY --from=builder /usr/local/bin/ssh-keyscan /usr/local/bin/ssh-keyscan
 COPY --from=builder /usr/local/bin/sshpass /usr/local/bin/sshpass
 COPY --from=builder /usr/local/bin/rsync /usr/local/bin/rsync
 COPY --from=builder /usr/local/bin/autossh /usr/local/bin/autossh
@@ -167,17 +199,17 @@ COPY --from=builder /usr/local/bin/autossh /usr/local/bin/autossh
 
 COPY <<EOF /etc/passwd
 root:x:0:0:root:/root:/usr/sbin/nologin
+nonroot:x:65532:65532:nonroot:/:/sbin/nologin
+nobody:x:65534:65534:nobody:/:/sbin/nologin
 EOF
 
-#COPY <<EOF /etc/passwd
-#sshuser:x:1000:1000:ssh user:/home/sshuser:/usr/sbin/nologin
-#EOF
-#
-#COPY <<EOF /etc/group
-#sshgroup:x:1000:
-#EOF
-#
-#USER 1000:1000
+COPY <<EOF /etc/group
+root:x:0:root
+nonroot:x:65532:
+nobody:x:65534:
+EOF
+
+USER nobody:nobody
 
 #ENTRYPOINT ["ssh"]
 #ENTRYPOINT ["sftp"]

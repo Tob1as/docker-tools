@@ -6,7 +6,7 @@ on:
     #  - 'main'
     #  - 'master'
     paths:
-      - 'static-ssh-tools.scratch.Dockerfile'
+      - 'static-ssh-tools.Dockerfile'
       - '.github/workflows/build_docker_images-static-ssh-tools.yaml'
   workflow_dispatch:
   #schedule:
