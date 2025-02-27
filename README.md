@@ -10,7 +10,7 @@ All Images are Multiarch (AMD64, ARM64 and ARM) builds and in the following Cont
 * [`quay.io/tobi312/tools:<TAG>`](https://quay.io/repository/tobi312/tools)
 
 Tools/Tags:
-* [`autossh`](#)
+* [`autossh`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/autossh.yml)
 * [`azcopy`](#)
 * [`c-mqtt-forwarder`](#)
 * [`dnsmasq`](#dnsmasq)
@@ -18,7 +18,7 @@ Tools/Tags:
 * [`figlet`](#figlet)
 * [`htpasswd`](#htpasswd)
 * [`keepalived`](#)
-* [`kiwiirc`](#)
+* [`kiwiirc`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/ircd.yml#L62)
 * [`mqtt-board`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-board.yml)
 * [`mqtt-client`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-client.yml)
 * [`mqtt-forwarder`](#)
