@@ -84,7 +84,8 @@ RUN \
     echo "<h1>Hello from statically linked nginx!</h1>" > "${OUTPUT_DIR}/html/index.html" && \
     file ${OUTPUT_DIR}/nginx && \
     #ldd ${OUTPUT_DIR}/nginx && \
-    tree ${OUTPUT_DIR}
+    tree ${OUTPUT_DIR} && \
+    ${OUTPUT_DIR}/nginx -help
 
 #FROM busybox:stable AS binary
 #FROM gcr.io/distroless/static-debian12:latest AS binary
