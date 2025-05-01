@@ -28,6 +28,7 @@ Tools/Tags:
 * [`proxyscotch`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/hoppscotch.yml)
 * [`squid`](#)
 * [`static-curl`](#)
+* [`static-nginx`](#)
 * [`static-ssh-tools`](#)
 * ToolBox:
   * [`toolbox`](#toolbox)
