@@ -87,12 +87,182 @@ RUN echo ">> do something after builds ..." && \
     cp nginx-${NGINX_VERSION}/objs/nginx ${OUTPUT_DIR}/ && \
     cp -r nginx-${NGINX_VERSION}/conf ${OUTPUT_DIR}/ && \
     mkdir -p ${OUTPUT_DIR}/logs ${OUTPUT_DIR}/html ${OUTPUT_DIR}/conf/conf.d && \
-    echo "<h1>Hello from statically linked NGINX!</h1>" > "${OUTPUT_DIR}/html/index.html" && \
+    mv ${OUTPUT_DIR}/conf/nginx.conf ${OUTPUT_DIR}/conf/nginx.conf.bak && \
+    #echo "<h1>Hello from statically linked NGINX!</h1>" > "${OUTPUT_DIR}/html/index.html" && \
     file ${OUTPUT_DIR}/nginx && \
     #ldd ${OUTPUT_DIR}/nginx && \
     tree ${OUTPUT_DIR} && \
     ${OUTPUT_DIR}/nginx -V && \
     ${OUTPUT_DIR}/nginx -help
+
+COPY <<EOF /nginx/conf/nginx.conf
+
+#user  nobody;
+worker_processes  auto;
+
+#error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+error_log  /dev/stderr notice;
+
+#pid        logs/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+    access_log  /dev/stdout  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    include conf.d/*.conf;
+}
+
+EOF
+
+COPY <<EOF /nginx/conf/conf.d/default.conf
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    #charset koi8-r;
+
+    #access_log  logs/host.access.log  main;
+
+    location / {
+        root   html;
+        index  index.html index.htm;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   html;
+    }
+
+    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+    #
+    #location ~ \.php$ {
+    #    proxy_pass   http://127.0.0.1;
+    #}
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    #location ~ \.php$ {
+    #    root           html;
+    #    fastcgi_pass   127.0.0.1:9000;
+    #    fastcgi_index  index.php;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    include        fastcgi_params;
+    #}
+
+    # deny access to .htaccess files, if Apache's document root
+    # concurs with nginx's one
+    #
+    #location ~ /\.ht {
+    #    deny  all;
+    #}
+
+    location /nginx_status {
+        stub_status on;   
+        access_log off;
+        allow 127.0.0.1;
+        allow 10.0.0.0/8;
+        allow 172.16.0.0/12;
+        allow 192.168.0.0/16;
+        allow ::1;
+        allow fc00::/7;
+        deny all;
+    }
+
+    location = /favicon.ico { log_not_found off; access_log off; }
+    location = /robots.txt { log_not_found off; }
+}
+
+
+# another virtual host using mix of IP-, name-, and port-based configuration
+#
+#server {
+#    listen       8000;
+#    listen       somename:8080;
+#    server_name  somename  alias  another.alias;
+
+#    location / {
+#        root   html;
+#        index  index.html index.htm;
+#    }
+#}
+
+
+# HTTPS server
+#
+#server {
+#    listen       443 ssl;
+#    server_name  localhost;
+
+#    ssl_certificate      cert.pem;
+#    ssl_certificate_key  cert.key;
+
+#    ssl_session_cache    shared:SSL:1m;
+#    ssl_session_timeout  5m;
+
+#    ssl_ciphers  HIGH:!aNULL:!MD5;
+#    ssl_prefer_server_ciphers  on;
+
+#    location / {
+#        root   html;
+#        index  index.html index.htm;
+#    }
+#}
+
+EOF
+
+COPY <<EOF /nginx/html/index.html
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is working. 
+Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+This is a static nginx build, for more details see:
+<a href="https://github.com/Tob1as/docker-tools/blob/main/static-nginx.Dockerfile">https://github.com/Tob1as/docker-tools</a>.</p>
+
+<p><em>Have Fun!</em></p>
+</body>
+</html>
+EOF
+
 
 #FROM busybox:stable AS binary
 #FROM gcr.io/distroless/static-debian12:latest AS binary
