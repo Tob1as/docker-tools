@@ -48,6 +48,17 @@ jobs:
           echo "docker_repo=${DOCKER_REPO}" >> "$GITHUB_OUTPUT"
           echo "redhat_quay_repo=${REDHAT_QUAY_REPO}" >> "$GITHUB_OUTPUT"
 
+          # build Versions
+          PCRE2_VERSION=$(curl -s https://api.github.com/repos/PCRE2Project/pcre2/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^pcre2-//')
+          ZLIB_VERSION=$(curl -s https://api.github.com/repos/madler/zlib/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^v//')
+          OPENSSL_VERSION=$(curl -s https://api.github.com/repos/openssl/openssl/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^openssl-//')
+          NGINX_VERSION=$(curl -s https://api.github.com/repos/nginx/nginx/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^release-//')
+          echo "pcre2_version=${PCRE2_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "zlib_version=${ZLIB_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "openssl_version=${OPENSSL_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "nginx_version=${NGINX_VERSION}" >> "$GITHUB_OUTPUT"
+
+
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v3
@@ -86,14 +97,19 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./static-nginx.Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          target: binary  # or: debug
+          target: binary
           build-args: |
             BUILD_DATE=${{steps.script.outputs.build_date}}
             VCS_REF=${{steps.script.outputs.commit_hash}}
+            PCRE2_VERSION=${{steps.script.outputs.pcre2_version}}
+            ZLIB_VERSION=${{steps.script.outputs.zlib_version}}
+            OPENSSL_VERSION=${{steps.script.outputs.openssl_version}}
+            NGINX_VERSION=${{steps.script.outputs.nginx_version}}
           tags: |
             docker.io/${{steps.script.outputs.docker_repo}}:static-nginx
             docker.io/${{steps.script.outputs.docker_repo}}:static-nginx-${{steps.script.outputs.commit_hash}}
+            docker.io/${{steps.script.outputs.docker_repo}}:static-nginx-${{steps.script.outputs.nginx_version}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:static-nginx
             ${{steps.script.outputs.git_url}}/${{steps.script.outputs.git_repo}}:static-nginx
