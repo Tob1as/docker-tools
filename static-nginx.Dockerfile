@@ -117,9 +117,9 @@ http {
     include       mime.types;
     default_type  application/octet-stream;
 
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
+    log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
+                      '\$status \$body_bytes_sent "\$http_referer" '
+                      '"\$http_user_agent" "\$http_x_forwarded_for"';
 
     #access_log  logs/access.log  main;
     access_log  /dev/stdout  main;
@@ -162,13 +162,13 @@ server {
 
     # proxy the PHP scripts to Apache listening on 127.0.0.1:80
     #
-    #location ~ \.php$ {
+    #location ~ \\.php$ {
     #    proxy_pass   http://127.0.0.1;
     #}
 
     # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
     #
-    #location ~ \.php$ {
+    #location ~ \\.php$ {
     #    root           html;
     #    fastcgi_pass   127.0.0.1:9000;
     #    fastcgi_index  index.php;
@@ -179,7 +179,7 @@ server {
     # deny access to .htaccess files, if Apache's document root
     # concurs with nginx's one
     #
-    #location ~ /\.ht {
+    #location ~ /\\.ht {
     #    deny  all;
     #}
 
