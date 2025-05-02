@@ -32,6 +32,8 @@ RUN echo ">> Install build packages ..." && \
         libtool \
         autoconf \
         automake \
+        \
+        geoip-dev \
     && \
     mkdir -p ${OUTPUT_DIR}
 
@@ -66,7 +68,8 @@ RUN echo ">> Download: openssl-${OPENSSL_VERSION} ..." && \
 # === Build NGINX static ===
 # https://github.com/nginx/nginx && https://nginx.org/
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#compiling-and-installing-from-source
-# configured like: "docker run --rm --name nginx-info --entrypoint=nginx -it nginx:alpine -V"
+# https://nginx.org/en/docs/configure.html
+# configured build like: "docker run --rm --name nginx-info --entrypoint=nginx -it nginx:alpine-slim -V"
 RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
     wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
     tar xf nginx-${NGINX_VERSION}.tar.gz && \
@@ -122,6 +125,8 @@ RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
         #--with-cc-opt='-static -Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
         --with-ld-opt="-static" \
         #--with-ld-opt='-static,-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
+        # others:
+        --with-http_geoip_module \
     && \
     make -j$(nproc) && \
     strip objs/nginx && \
