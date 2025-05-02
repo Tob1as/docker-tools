@@ -40,8 +40,8 @@ RUN echo ">> BUILD: pcre2-${PCRE2_VERSION} ..." && \
     wget https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${PCRE2_VERSION}/pcre2-${PCRE2_VERSION}.tar.gz && \
     tar xf pcre2-${PCRE2_VERSION}.tar.gz && \
     cd pcre2-${PCRE2_VERSION} && \
-    ./configure --disable-shared --enable-static && \
-    make -j$(nproc) && \
+    #./configure --disable-shared --enable-static && \
+    #make -j$(nproc) && \
     cd ..
 
 # https://github.com/madler/zlib
@@ -49,8 +49,8 @@ RUN echo ">> BUILD: zlib-${ZLIB_VERSION} ..." && \
     wget https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz && \
     tar xf zlib-${ZLIB_VERSION}.tar.gz && \
     cd zlib-${ZLIB_VERSION} && \
-    ./configure --static && \
-    make -j$(nproc) && \
+    #./configure --static && \
+    #make -j$(nproc) && \
     cd ..
 
 # https://github.com/openssl/openssl
@@ -59,8 +59,8 @@ RUN echo ">> BUILD: openssl-${OPENSSL_VERSION} ..." && \
     tar xf openssl-${OPENSSL_VERSION}.tar.gz && \
     cd openssl-${OPENSSL_VERSION} && \
     ./Configure no-shared no-dso no-tests --prefix="${BUILD_DIR}/openssl-static" && \
-    make -j$(nproc) && \
-    make install_sw && \
+    #make -j$(nproc) && \
+    #make install_sw && \
     cd ..
 
 # === Build NGINX static ===
@@ -80,7 +80,8 @@ RUN echo ">> BUILD: nginx-${NGINX_VERSION} ..." && \
         --with-zlib=../zlib-${ZLIB_VERSION} \
         --with-openssl=../openssl-${OPENSSL_VERSION} \
     && \
-    make -j1 && \
+    make -j$(nproc) && \
+    strip objs/nginx && \
     cd ..
 
 RUN echo ">> do something after builds ..." && \
@@ -88,7 +89,6 @@ RUN echo ">> do something after builds ..." && \
     cp -r nginx-${NGINX_VERSION}/conf ${OUTPUT_DIR}/ && \
     mkdir -p ${OUTPUT_DIR}/logs ${OUTPUT_DIR}/html ${OUTPUT_DIR}/conf/conf.d && \
     mv ${OUTPUT_DIR}/conf/nginx.conf ${OUTPUT_DIR}/conf/nginx.conf.bak && \
-    #echo "<h1>Hello from statically linked NGINX!</h1>" > "${OUTPUT_DIR}/html/index.html" && \
     file ${OUTPUT_DIR}/nginx && \
     #ldd ${OUTPUT_DIR}/nginx && \
     tree ${OUTPUT_DIR} && \
