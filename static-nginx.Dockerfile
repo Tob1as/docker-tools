@@ -36,7 +36,7 @@ RUN echo ">> Install build packages ..." && \
     mkdir -p ${OUTPUT_DIR}
 
 # https://github.com/PCRE2Project/pcre2
-RUN echo ">> BUILD: pcre2-${PCRE2_VERSION} ..." && \
+RUN echo ">> Download: pcre2-${PCRE2_VERSION} ..." && \
     wget https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${PCRE2_VERSION}/pcre2-${PCRE2_VERSION}.tar.gz && \
     tar xf pcre2-${PCRE2_VERSION}.tar.gz && \
     cd pcre2-${PCRE2_VERSION} && \
@@ -45,7 +45,7 @@ RUN echo ">> BUILD: pcre2-${PCRE2_VERSION} ..." && \
     cd ..
 
 # https://github.com/madler/zlib
-RUN echo ">> BUILD: zlib-${ZLIB_VERSION} ..." && \
+RUN echo ">> Download: zlib-${ZLIB_VERSION} ..." && \
     wget https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz && \
     tar xf zlib-${ZLIB_VERSION}.tar.gz && \
     cd zlib-${ZLIB_VERSION} && \
@@ -54,11 +54,11 @@ RUN echo ">> BUILD: zlib-${ZLIB_VERSION} ..." && \
     cd ..
 
 # https://github.com/openssl/openssl
-RUN echo ">> BUILD: openssl-${OPENSSL_VERSION} ..." && \
+RUN echo ">> Download: openssl-${OPENSSL_VERSION} ..." && \
     wget https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz && \
     tar xf openssl-${OPENSSL_VERSION}.tar.gz && \
     cd openssl-${OPENSSL_VERSION} && \
-    ./Configure no-shared no-dso no-tests --prefix="${BUILD_DIR}/openssl-static" && \
+    #./Configure no-shared no-dso no-tests --prefix="${BUILD_DIR}/openssl-static" && \
     #make -j$(nproc) && \
     #make install_sw && \
     cd ..
@@ -66,19 +66,62 @@ RUN echo ">> BUILD: openssl-${OPENSSL_VERSION} ..." && \
 # === Build NGINX static ===
 # https://github.com/nginx/nginx && https://nginx.org/
 # https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#compiling-and-installing-from-source
-RUN echo ">> BUILD: nginx-${NGINX_VERSION} ..." && \
+# configured like: "docker run --rm --name nginx-info --entrypoint=nginx -it nginx:alpine -V"
+RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
     wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
     tar xf nginx-${NGINX_VERSION}.tar.gz && \
     cd nginx-${NGINX_VERSION} && \
     ./configure \
-        --prefix=. \
-        --with-cc-opt="-static -Os" \
-        --with-ld-opt="-static" \
-        --with-http_ssl_module \
-        --with-http_stub_status_module \
         --with-pcre=../pcre2-${PCRE2_VERSION} \
         --with-zlib=../zlib-${ZLIB_VERSION} \
         --with-openssl=../openssl-${OPENSSL_VERSION} \
+        --prefix=. \
+        #--sbin-path=./nginx \
+        --modules-path=./modules \
+        #--conf-path=./conf/nginx.conf \
+        #--error-log-path=./logs/error.log \
+        #--error-log-path=/dev/stderr \
+        #--http-log-path=./logs/access.log \
+        #--http-log-path=/dev/stdout \
+        --pid-path=./run/nginx.pid \
+        --lock-path=./run/nginx.lock \
+        --http-client-body-temp-path=./temp/client-body \
+        --http-proxy-temp-path=./temp/proxy \
+        --http-fastcgi-temp-path=./temp/fastcgi \
+        --http-uwsgi-temp-path=./temp/uwsgi \
+        --http-scgi-temp-path=./temp/scgi \
+        #--with-perl_modules_path=./modules_perl \
+        --user=nobody \
+        --group=nogroup \
+        --with-compat \
+        --with-file-aio \
+        --with-threads \
+        --with-http_addition_module \
+        --with-http_auth_request_module \
+        --with-http_dav_module \
+        --with-http_flv_module \
+        --with-http_gunzip_module \
+        --with-http_gzip_static_module \
+        --with-http_mp4_module \
+        --with-http_random_index_module \
+        --with-http_realip_module \
+        --with-http_secure_link_module \
+        --with-http_slice_module \
+        --with-http_ssl_module \
+        --with-http_stub_status_module \
+        --with-http_sub_module \
+        --with-http_v2_module \
+        --with-http_v3_module \
+        --with-mail \
+        --with-mail_ssl_module \
+        --with-stream \
+        --with-stream_realip_module \
+        --with-stream_ssl_module \
+        --with-stream_ssl_preread_module \
+        --with-cc-opt="-static -Os" \
+        #--with-cc-opt='-static -Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
+        --with-ld-opt="-static" \
+        #--with-ld-opt='-static,-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
     && \
     make -j$(nproc) && \
     strip objs/nginx && \
@@ -87,7 +130,7 @@ RUN echo ">> BUILD: nginx-${NGINX_VERSION} ..." && \
 RUN echo ">> do something after builds ..." && \
     cp nginx-${NGINX_VERSION}/objs/nginx ${OUTPUT_DIR}/ && \
     cp -r nginx-${NGINX_VERSION}/conf ${OUTPUT_DIR}/ && \
-    mkdir -p ${OUTPUT_DIR}/logs ${OUTPUT_DIR}/html ${OUTPUT_DIR}/conf/conf.d && \
+    mkdir -p ${OUTPUT_DIR}/logs ${OUTPUT_DIR}/html ${OUTPUT_DIR}/conf/conf.d ${OUTPUT_DIR}/run ${OUTPUT_DIR}/temp ${OUTPUT_DIR}/modules && \
     mv ${OUTPUT_DIR}/conf/nginx.conf ${OUTPUT_DIR}/conf/nginx.conf.bak && \
     file ${OUTPUT_DIR}/nginx && \
     #ldd ${OUTPUT_DIR}/nginx && \
@@ -98,6 +141,7 @@ RUN echo ">> do something after builds ..." && \
 COPY <<EOF /nginx/conf/nginx.conf
 
 #user  nobody;
+#user  nobody nogroup;
 worker_processes  auto;
 
 #error_log  logs/error.log;
@@ -293,13 +337,13 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certifi
 COPY --from=builder /nginx /nginx
 
 COPY <<EOF /etc/passwd
-root:x:0:0:root:/root:/usr/sbin/nologin
+root:x:0:0:root:/root:/sbin/nologin
 nobody:x:65534:65534:nobody:/:/sbin/nologin
 EOF
 
 COPY <<EOF /etc/group
 root:x:0:root
-nobody:x:65534:
+nogroup:x:65534:
 EOF
 
 STOPSIGNAL SIGQUIT
