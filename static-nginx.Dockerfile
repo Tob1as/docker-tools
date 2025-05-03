@@ -221,7 +221,7 @@ server {
     #    root           html;
     #    fastcgi_pass   127.0.0.1:9000;
     #    fastcgi_index  index.php;
-    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+    #    fastcgi_param  SCRIPT_FILENAME  /scripts\$fastcgi_script_name;
     #    include        fastcgi_params;
     #}
 
@@ -267,10 +267,11 @@ server {
 #
 #server {
 #    listen       443 ssl;
+#    listen  [::]:443 ssl;
 #    server_name  localhost;
 
-#    ssl_certificate      cert.pem;
-#    ssl_certificate_key  cert.key;
+#    ssl_certificate      ssl/ssl.crt;
+#    ssl_certificate_key  ssl/ssl.key;
 
 #    ssl_session_cache    shared:SSL:1m;
 #    ssl_session_timeout  5m;
@@ -313,8 +314,6 @@ This is a static nginx build, for more details see:
 EOF
 
 
-#FROM busybox:stable AS binary
-#FROM gcr.io/distroless/static-debian12:latest AS binary
 FROM scratch AS binary
 
 ARG VCS_REF
