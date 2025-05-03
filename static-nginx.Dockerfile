@@ -121,10 +121,10 @@ RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
         --with-stream_realip_module \
         --with-stream_ssl_module \
         --with-stream_ssl_preread_module \
-        --with-cc-opt="-static -Os" \
-        #--with-cc-opt='-static -Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
-        --with-ld-opt="-static" \
-        #--with-ld-opt='-static,-Wl,--as-needed,-O1,--sort-common -Wl,-z,pack-relative-relocs' \
+        #--with-cc-opt="-static -Os" \
+        --with-cc-opt='-static -Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
+        #--with-ld-opt="-static" \
+        --with-ld-opt='-static -Wl,--as-needed,-O1,--sort-common' \
         # others:
         --with-http_geoip_module \
     && \
@@ -186,6 +186,7 @@ http {
 EOF
 
 COPY <<EOF /nginx/conf/conf.d/default.conf
+# HTTP server
 server {
     listen       80;
     listen  [::]:80;
@@ -248,41 +249,76 @@ server {
     location = /robots.txt { log_not_found off; }
 }
 
-
-# another virtual host using mix of IP-, name-, and port-based configuration
-#
-#server {
-#    listen       8000;
-#    listen       somename:8080;
-#    server_name  somename  alias  another.alias;
-
-#    location / {
-#        root   html;
-#        index  index.html index.htm;
-#    }
-#}
-
-
 # HTTPS server
-#
 #server {
 #    listen       443 ssl;
 #    listen  [::]:443 ssl;
 #    server_name  localhost;
-
+#
 #    ssl_certificate      ssl/ssl.crt;
 #    ssl_certificate_key  ssl/ssl.key;
-
+#
 #    ssl_session_cache    shared:SSL:1m;
 #    ssl_session_timeout  5m;
-
+#
 #    ssl_ciphers  HIGH:!aNULL:!MD5;
 #    ssl_prefer_server_ciphers  on;
-
+#
+#    #charset koi8-r;
+#
+#    #access_log  logs/host.access.log  main;
+#
 #    location / {
 #        root   html;
 #        index  index.html index.htm;
 #    }
+#
+#    #error_page  404              /404.html;
+#
+#    # redirect server error pages to the static page /50x.html
+#    #
+#    error_page   500 502 503 504  /50x.html;
+#    location = /50x.html {
+#        root   html;
+#    }
+#
+#    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+#    #
+#    #location ~ \\.php$ {
+#    #    proxy_pass   http://127.0.0.1;
+#    #}
+#
+#    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+#    #
+#    #location ~ \\.php$ {
+#    #    root           html;
+#    #    fastcgi_pass   127.0.0.1:9000;
+#    #    fastcgi_index  index.php;
+#    #    fastcgi_param  SCRIPT_FILENAME  /scripts\$fastcgi_script_name;
+#    #    include        fastcgi_params;
+#    #}
+#
+#    # deny access to .htaccess files, if Apache's document root
+#    # concurs with nginx's one
+#    #
+#    #location ~ /\\.ht {
+#    #    deny  all;
+#    #}
+#
+#    location /nginx_status {
+#        stub_status on;   
+#        access_log off;
+#        allow 127.0.0.1;
+#        allow 10.0.0.0/8;
+#        allow 172.16.0.0/12;
+#        allow 192.168.0.0/16;
+#        allow ::1;
+#        allow fc00::/7;
+#        deny all;
+#    }
+#
+#    location = /favicon.ico { log_not_found off; access_log off; }
+#    location = /robots.txt { log_not_found off; }
 #}
 
 EOF
