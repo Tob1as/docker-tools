@@ -7,6 +7,7 @@ on:
     #  - 'master'
     paths:
       - 'static-nginx.Dockerfile'
+      - 'static-nginx.unprivileged.Dockerfile'
       - '.github/workflows/build_docker_images-static-nginx.yaml'
   workflow_dispatch:
   #schedule:
@@ -113,3 +114,26 @@ jobs:
             docker.io/${{steps.script.outputs.docker_repo}}:static-nginx-${{steps.script.outputs.nginx_version}}
             quay.io/${{steps.script.outputs.redhat_quay_repo}}:static-nginx
             ${{steps.script.outputs.git_url}}/${{steps.script.outputs.git_repo}}:static-nginx
+
+      - name: Build-unprivileged
+        uses: docker/build-push-action@v6
+        with:
+          builder: ${{ steps.buildx.outputs.name }}
+          context: .
+          file: ./static-nginx.unprivileged.Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          target: binary
+          build-args: |
+            BUILD_DATE=${{steps.script.outputs.build_date}}
+            VCS_REF=${{steps.script.outputs.commit_hash}}
+            PCRE2_VERSION=${{steps.script.outputs.pcre2_version}}
+            ZLIB_VERSION=${{steps.script.outputs.zlib_version}}
+            OPENSSL_VERSION=${{steps.script.outputs.openssl_version}}
+            NGINX_VERSION=${{steps.script.outputs.nginx_version}}
+          tags: |
+            docker.io/${{steps.script.outputs.docker_repo}}:static-nginx-unprivileged
+            docker.io/${{steps.script.outputs.docker_repo}}:static-nginx-unprivileged-${{steps.script.outputs.commit_hash}}
+            docker.io/${{steps.script.outputs.docker_repo}}:static-nginx-unprivileged-${{steps.script.outputs.nginx_version}}
+            quay.io/${{steps.script.outputs.redhat_quay_repo}}:static-nginx-unprivileged
+            ${{steps.script.outputs.git_url}}/${{steps.script.outputs.git_repo}}:static-nginx-unprivileged
