@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain --target binary --build-arg NGINX_VERSION=1.28.0 -t tobi312/tools:static-nginx-unprivileged -f static-nginx-unprivileged.Dockerfile .
+# build: docker build --no-cache --progress=plain --target binary --build-arg NGINX_VERSION=1.28.0 -t tobi312/tools:static-nginx-unprivileged -f static-nginx.unprivileged.Dockerfile .
 ARG NGINX_VERSION=1.28.0
 
 FROM tobi312/tools:static-nginx${NGINX_VERSION:+-${NGINX_VERSION}} AS base
