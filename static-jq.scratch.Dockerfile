@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain --target binary --build-arg JQ_VERSION=1.7.1 -t tobi312/tools:static-jq -f static-jq.Dockerfile .
+# build: docker build --no-cache --progress=plain --target binary --build-arg JQ_VERSION=1.7.1 -t tobi312/tools:static-jq -f static-jq.scratch.Dockerfile .
 ARG JQ_VERSION
 FROM alpine:latest AS static-jq
 

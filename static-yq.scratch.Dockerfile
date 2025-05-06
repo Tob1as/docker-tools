@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain --target binary --build-arg YQ_VERSION=4.45.2 -t tobi312/tools:static-yq -f static-yq.Dockerfile .
+# build: docker build --no-cache --progress=plain --target binary --build-arg YQ_VERSION=4.45.2 -t tobi312/tools:static-yq -f static-yq.scratch.Dockerfile .
 ARG YQ_VERSION
 FROM golang:alpine AS static-yq
 

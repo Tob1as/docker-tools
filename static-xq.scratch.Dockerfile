@@ -1,4 +1,4 @@
-# build: docker build --no-cache --progress=plain --target binary --build-arg XQ_VERSION=1.3.0 -t tobi312/tools:static-xq -f static-xq.Dockerfile .
+# build: docker build --no-cache --progress=plain --target binary --build-arg XQ_VERSION=1.3.0 -t tobi312/tools:static-xq -f static-xq.scratch.Dockerfile .
 ARG XQ_VERSION
 FROM alpine:latest AS static-xq
 
