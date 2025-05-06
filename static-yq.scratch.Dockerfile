@@ -16,7 +16,7 @@ RUN \
     YQ_VERSION=${YQ_VERSION:-$(wget -qO- https://api.github.com/repos/mikefarah/yq/releases/latest | grep 'tag_name' | cut -d\" -f4)} ; \
     YQ_VERSION=$(echo ${YQ_VERSION} | sed 's/^v//') ; \
     echo ">> YQ_VERSION=${YQ_VERSION}" ; \
-    wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH}" ; \
+    wget -qO /usr/local/bin/yq "https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_${OS}_${TARGETARCH}" ; \
     chmod +x /usr/local/bin/yq ; \
     echo ">> YQ_VERSION (check): $(yq --version)" ; \
     echo ">> yq Help:" ; \
