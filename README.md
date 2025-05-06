@@ -32,6 +32,7 @@ Tools/Tags:
 * [`static-xq`](#)
 * [`static-yq`](#)
 * [`static-kubectl`](#)
+* [`static-helm`](#)
 * NGINX (static):
   * [`static-nginx`](#)
   * [`static-nginx-unprivileged`](#)
