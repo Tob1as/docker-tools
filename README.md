@@ -28,10 +28,18 @@ Tools/Tags:
 * [`proxyscotch`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/hoppscotch.yml)
 * [`squid`](#)
 * [`static-curl`](#)
+* [`static-jq`](#)
+* [`static-xq`](#)
+* [`static-yq`](#)
+* [`static-kubectl`](#)
 * NGINX (static):
   * [`static-nginx`](#)
   * [`static-nginx-unprivileged`](#)
 * [`static-ssh-tools`](#)
+  * ssh, sftp, scp, ssh-keygen
+  * sshpass
+  * rsync
+  * autossh
 * ToolBox:
   * [`toolbox`](#toolbox)
   * [`toolbox-extended`](#toolbox)
