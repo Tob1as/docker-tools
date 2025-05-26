@@ -42,8 +42,9 @@ RUN echo ">> Download: pcre2-${PCRE2_VERSION} ..." && \
     wget https://github.com/PCRE2Project/pcre2/releases/download/pcre2-${PCRE2_VERSION}/pcre2-${PCRE2_VERSION}.tar.gz && \
     tar xf pcre2-${PCRE2_VERSION}.tar.gz && \
     cd pcre2-${PCRE2_VERSION} && \
-    #./configure --disable-shared --enable-static && \
+    #./configure --disable-shared --enable-static --enable-jit --prefix="${BUILD_DIR}/pcre2-static" && \
     #make -j$(nproc) && \
+    #make install && \
     cd ..
 
 # https://github.com/madler/zlib
@@ -51,8 +52,9 @@ RUN echo ">> Download: zlib-${ZLIB_VERSION} ..." && \
     wget https://zlib.net/zlib-${ZLIB_VERSION}.tar.gz && \
     tar xf zlib-${ZLIB_VERSION}.tar.gz && \
     cd zlib-${ZLIB_VERSION} && \
-    #./configure --static && \
+    #./configure --static --prefix="${BUILD_DIR}/zlib-static" && \
     #make -j$(nproc) && \
+    #make install && \
     cd ..
 
 # https://github.com/openssl/openssl
