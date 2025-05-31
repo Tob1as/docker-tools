@@ -25,6 +25,10 @@ RUN apk add --no-cache \
 # elasticdump (multielasticdump)
 # hadolint ignore=DL3018
 RUN \
+    apk add --no-cache --virtual .build-deps \
+        #git \
+        python3 make g++ \
+    ; \
     apk add --no-cache \
         npm \
     ; \
@@ -32,6 +36,7 @@ RUN \
     mongosh --version ; \
     npm i -g elasticdump ; \
     elasticdump --version ; \
+    apk del --no-network --purge .build-deps ; \
     echo ">> Databse-Tools Part 2 (via npm) installed!"
 
 # Datbase Tools Part 3
