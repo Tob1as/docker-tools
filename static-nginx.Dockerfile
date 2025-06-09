@@ -69,7 +69,7 @@ RUN echo ">> Download: openssl-${OPENSSL_VERSION} ..." && \
 
 # === Build NGINX static ===
 # https://github.com/nginx/nginx && https://nginx.org/
-# https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#compiling-and-installing-from-source
+# https://docs.nginx.com/nginx/admin-guide/installing-nginx/installing-nginx-open-source/#sources
 # https://nginx.org/en/docs/configure.html
 # configured build like: "docker run --rm --name nginx-info --entrypoint=nginx -it nginx:alpine-slim -V"
 RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
@@ -123,9 +123,7 @@ RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
         --with-stream_realip_module \
         --with-stream_ssl_module \
         --with-stream_ssl_preread_module \
-        #--with-cc-opt="-static -Os" \
         --with-cc-opt='-static -Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
-        #--with-ld-opt="-static" \
         --with-ld-opt='-static -Wl,--as-needed,-O1,--sort-common' \
         # others:
         --with-http_geoip_module \
@@ -368,7 +366,7 @@ LABEL org.opencontainers.image.title="Static NGINX" \
       org.opencontainers.image.version="${NGINX_VERSION}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
       org.opencontainers.image.revision="${VCS_REF}" \
-      org.opencontainers.image.description="Static NGINX ${NGINX_VERSION} build with pcre2-${PCRE2_VERSION}, zlib-${ZLIB_VERSION} and openssl-${OPENSSL_VERSION}" \
+      org.opencontainers.image.description="Static NGINX${NGINX_VERSION:+ ${NGINX_VERSION}} build with pcre2${PCRE2_VERSION:+-${PCRE2_VERSION}}, zlib${ZLIB_VERSION:+-${ZLIB_VERSION}} and openssl${OPENSSL_VERSION:+-${OPENSSL_VERSION}}" \
       org.opencontainers.image.documentation="https://github.com/Tob1as/docker-tools/" \
       org.opencontainers.image.base.name="scratch" \
       org.opencontainers.image.licenses="WTFPL" \
