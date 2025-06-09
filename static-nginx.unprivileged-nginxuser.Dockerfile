@@ -34,6 +34,7 @@ RUN echo ">> Install build packages ..." && \
         automake \
         \
         geoip-dev \
+        geoip-static \
     && \
     mkdir -p ${OUTPUT_DIR}
 
@@ -115,7 +116,7 @@ RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
         --with-cc-opt='-static -Os -fstack-clash-protection -Wformat -Werror=format-security -fno-plt -g' \
         --with-ld-opt='-static -Wl,--as-needed,-O1,--sort-common' \
         # others:
-        #--with-http_geoip_module \
+        --with-http_geoip_module \
     && \
     make -j$(nproc) && \
     strip objs/nginx && \

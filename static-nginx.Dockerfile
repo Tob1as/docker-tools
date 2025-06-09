@@ -34,6 +34,7 @@ RUN echo ">> Install build packages ..." && \
         automake \
         \
         geoip-dev \
+        geoip-static \
     && \
     mkdir -p ${OUTPUT_DIR}
 
