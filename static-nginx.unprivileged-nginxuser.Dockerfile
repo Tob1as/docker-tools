@@ -13,7 +13,7 @@ ENV OUTPUT_DIR=/nginx
 
 LABEL org.opencontainers.image.title="Static NGINX"\
       org.opencontainers.image.revision="${VCS_REF}" \
-      org.opencontainers.image.description="Static NGINX ${NGINX_VERSION} build with pcre2-${PCRE2_VERSION}, zlib-${ZLIB_VERSION} and openssl-${OPENSSL_VERSION}" \
+      org.opencontainers.image.description="Static NGINX${NGINX_VERSION:+ ${NGINX_VERSION}} (unprivileged/nginxuser) build with pcre2${PCRE2_VERSION:+-${PCRE2_VERSION}}, zlib${ZLIB_VERSION:+-${ZLIB_VERSION}} and openssl${OPENSSL_VERSION:+-${OPENSSL_VERSION}}" \
       org.opencontainers.image.source="https://github.com/Tob1as/docker-tools/"
 
 SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
@@ -33,8 +33,7 @@ RUN echo ">> Install build packages ..." && \
         autoconf \
         automake \
         \
-        geoip-dev \
-        geoip-static \
+        geoip-dev geoip-static \
     && \
     mkdir -p ${OUTPUT_DIR}
 
@@ -123,7 +122,7 @@ RUN echo ">> Download and BUILD: nginx-${NGINX_VERSION} ..." && \
     cd ..
 
 RUN echo ">> do something after builds ..." && \
-    mkdir -p ${OUTPUT_DIR}/etc/nginx/ ${OUTPUT_DIR}/var/cache/nginx/ ${OUTPUT_DIR}/usr/sbin ${OUTPUT_DIR}/usr/lib/nginx/modules ${OUTPUT_DIR}/var/run ${OUTPUT_DIR}/var/log/nginx ${OUTPUT_DIR}/usr/share/nginx/html && \
+    mkdir -p ${OUTPUT_DIR}/etc/nginx/ ${OUTPUT_DIR}/var/cache/nginx/ ${OUTPUT_DIR}/usr/sbin ${OUTPUT_DIR}/usr/lib/nginx/modules ${OUTPUT_DIR}/var/run ${OUTPUT_DIR}/var/log/nginx ${OUTPUT_DIR}/usr/share/nginx/html ${OUTPUT_DIR}/etc/ssl/ && \
     cp nginx-${NGINX_VERSION}/objs/nginx ${OUTPUT_DIR}/usr/sbin/ && \
     cp -r nginx-${NGINX_VERSION}/conf/. ${OUTPUT_DIR}/etc/nginx/ && \
     #cp -r nginx-${NGINX_VERSION}/html/. ${OUTPUT_DIR}/usr/share/nginx/html && \
@@ -152,7 +151,7 @@ events {
 
 
 http {
-    include       mime.types;
+    include       /etc/nginx/mime.types;
     default_type  application/octet-stream;
 
     log_format  main  '\$remote_addr - \$remote_user [\$time_local] "\$request" '
@@ -168,6 +167,8 @@ http {
     keepalive_timeout  65;
 
     #gzip  on;
+
+    #server_tokens off;
 
     include /etc/nginx/conf.d/*.conf;
 }
@@ -196,7 +197,7 @@ server {
     #
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
-        root   html;
+        root   /usr/share/nginx/html;
     }
 
     # proxy the PHP scripts to Apache listening on 127.0.0.1:80
@@ -244,8 +245,8 @@ server {
 #    listen  [::]:443 ssl;
 #    server_name  localhost;
 #
-#    ssl_certificate      /ssl/ssl.crt;
-#    ssl_certificate_key  /ssl/ssl.key;
+#    ssl_certificate      /etc/ssl/ssl.crt;
+#    ssl_certificate_key  /etc/ssl/ssl.key;
 #
 #    ssl_session_cache    shared:SSL:1m;
 #    ssl_session_timeout  5m;
@@ -268,7 +269,7 @@ server {
 #    #
 #    error_page   500 502 503 504  /50x.html;
 #    location = /50x.html {
-#        root   html;
+#        root   /usr/share/nginx/html;
 #    }
 #
 #    # proxy the PHP scripts to Apache listening on 127.0.0.1:80
@@ -390,5 +391,4 @@ STOPSIGNAL SIGQUIT
 EXPOSE 8080
 USER 101
 
-ENTRYPOINT ["nginx"]
-CMD ["-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
