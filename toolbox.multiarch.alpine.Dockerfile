@@ -53,6 +53,8 @@ RUN \
         oath-toolkit-oathtool \
         msmtp \
         tar \
+        kubectl \
+        nmap \
     ; \
     echo ">> Tools installed!"
 
