@@ -37,7 +37,7 @@ jobs:
           GIT_REPO_SHORT=${GIT_REPO_SHORT#"docker-"}
           DOCKER_REPO=${{ secrets.DOCKER_USERNAME }}/${GIT_REPO_SHORT}
           REDHAT_QUAY_REPO=${{ secrets.REDHAT_QUAY_USERNAME }}/${GIT_REPO_SHORT}
-
+          
           #echo "ENVs: BUILD_DATE=${BUILD_DATE}, BUILD_DATE_NUMERIC=${BUILD_DATE_NUMERIC}, COMMIT_HASH=${COMMIT_HASH}, GIT_URL=${GIT_URL}, GIT_REPO=${GIT_REPO}"
           
           # Set output parameters to action.
@@ -48,11 +48,13 @@ jobs:
           echo "git_repo=${GIT_REPO}" >> "$GITHUB_OUTPUT"
           echo "docker_repo=${DOCKER_REPO}" >> "$GITHUB_OUTPUT"
           echo "redhat_quay_repo=${REDHAT_QUAY_REPO}" >> "$GITHUB_OUTPUT"
-
+          
           # build Versions
           PCRE2_VERSION=$(curl -s https://api.github.com/repos/PCRE2Project/pcre2/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^pcre2-//')
           ZLIB_VERSION=$(curl -s https://api.github.com/repos/madler/zlib/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^v//')
-          OPENSSL_VERSION=$(curl -s https://api.github.com/repos/openssl/openssl/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^openssl-//')
+          #OPENSSL_VERSION=$(curl -s https://api.github.com/repos/openssl/openssl/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^openssl-//')
+          #OPENSSL_VERSION=$(curl -s https://api.github.com/repos/openssl/openssl/tags | jq -r '.[].name' | grep -E '^openssl-[0-9]+\.[0-9]+\.[0-9]+$' | sed 's/^openssl-//' | sort -V -r | grep '^3\.5\.' | head -n1)
+          OPENSSL_VERSION=$(curl -s https://api.github.com/repos/openssl/openssl/tags | grep name | grep 'openssl-[0-9]\+\.[0-9]\+\.[0-9]\+"' | sed -E 's/.*openssl-([0-9]+\.[0-9]+\.[0-9]+).*/\1/' | sort -Vr | grep '^3\.5\.'  | head -n1)
           NGINX_VERSION=$(curl -s https://api.github.com/repos/nginx/nginx/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^release-//')
           echo "pcre2_version=${PCRE2_VERSION}" >> "$GITHUB_OUTPUT"
           echo "zlib_version=${ZLIB_VERSION}" >> "$GITHUB_OUTPUT"
