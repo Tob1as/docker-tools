@@ -18,7 +18,7 @@ RUN \
     echo ">> HELM_VERSION=${HELM_VERSION}" ; \
     wget -qO- "https://get.helm.sh/helm-v${HELM_VERSION}-${OS}-${TARGETARCH}.tar.gz" | tar -xz --strip-components=1 -C /usr/local/bin/ ${OS}-${TARGETARCH}/helm ; \
     chmod +x /usr/local/bin/helm ; \
-    echo ">> HELM_VERSION (check): $(kubectl version)" ; \
+    echo ">> HELM_VERSION (check): $(helm version)" ; \
     echo ">> helm Help:" ; \
     helm --help
 
