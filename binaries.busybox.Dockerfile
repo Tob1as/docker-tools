@@ -17,6 +17,7 @@ COPY --from=tobi312/tools:mqtt-forwarder /usr/local/bin/mqtt-forwarder .
 COPY --from=tobi312/tools:postgres-exporter /bin/postgres_exporter .
 COPY --from=tobi312/tools:proxyscotch /usr/local/bin/proxyscotch .
 COPY --from=tobi312/tools:static-curl /usr/bin/curl .
+COPY --from=tobi312/tools:static-etcdctl /usr/local/bin/etcdctl .
 COPY --from=tobi312/tools:static-helm /usr/local/bin/helm .
 COPY --from=tobi312/tools:static-jq /usr/local/bin/jq .
 COPY --from=tobi312/tools:static-kubectl /usr/local/bin/kubectl .
