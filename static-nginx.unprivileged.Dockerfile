@@ -39,7 +39,7 @@ LABEL org.opencontainers.image.title="Static NGINX" \
       org.opencontainers.image.description="Static NGINX${NGINX_VERSION:+ ${NGINX_VERSION}} (unprivileged) build with pcre2${PCRE2_VERSION:+-${PCRE2_VERSION}}, zlib${ZLIB_VERSION:+-${ZLIB_VERSION}} and openssl${OPENSSL_VERSION:+-${OPENSSL_VERSION}}" \
       org.opencontainers.image.documentation="https://github.com/Tob1as/docker-tools/" \
       org.opencontainers.image.base.name="scratch" \
-      org.opencontainers.image.licenses="WTFPL" \
+      org.opencontainers.image.licenses="BSD-2-Clause license" \
       org.opencontainers.image.url="https://hub.docker.com/r/tobi312/tools" \
       org.opencontainers.image.source="https://github.com/Tob1as/docker-tools/"
 
