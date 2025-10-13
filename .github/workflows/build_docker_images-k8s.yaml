@@ -81,7 +81,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./k8s-tools.alpine.Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64
           push: true
           #target: production
           build-args: |
