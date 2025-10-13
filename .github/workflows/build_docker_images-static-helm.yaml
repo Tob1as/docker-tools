@@ -52,6 +52,9 @@ jobs:
           HELM_VERSION=$(wget -qO- https://api.github.com/repos/helm/helm/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^v//')
           echo "HELM_VERSION=${HELM_VERSION}"
           echo "helm_version=${HELM_VERSION}" >> "$GITHUB_OUTPUT"
+          HELM_DIFF_VERSION=$(wget -qO- https://api.github.com/repos/databus23/helm-diff/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/^v//')
+          echo "HELM_DIFF_VERSION=${HELM_DIFF_VERSION}"
+          echo "helm_diff_version=${HELM_DIFF_VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         id: qemu
@@ -98,6 +101,7 @@ jobs:
             BUILD_DATE=${{steps.script.outputs.build_date}}
             VCS_REF=${{steps.script.outputs.commit_hash}}
             HELM_VERSION=${{steps.script.outputs.helm_version}}
+            HELM_DIFF_VERSION=${{steps.script.outputs.helm_diff_version}}
           tags: |
             docker.io/${{steps.script.outputs.docker_repo}}:static-helm
             docker.io/${{steps.script.outputs.docker_repo}}:static-helm-${{steps.script.outputs.helm_version}}
