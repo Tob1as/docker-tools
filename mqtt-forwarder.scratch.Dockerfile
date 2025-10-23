@@ -1,5 +1,5 @@
-# docker build --no-cache --progress=plain --build-arg GO_VERSION=1.23 --build-arg VERSION=1.1.1 -t tobi312/tools:mqtt-forwarder -f mqtt-forwarder.scratch.Dockerfile .
-ARG GO_VERSION=1.23
+# docker build --no-cache --progress=plain --build-arg GO_VERSION=1.25 --build-arg VERSION=1.1.1 -t tobi312/tools:mqtt-forwarder -f mqtt-forwarder.scratch.Dockerfile .
+ARG GO_VERSION=1.25
 FROM golang:${GO_VERSION}-alpine AS builder
 ARG VERSION=master
 ENV GOPATH=/go
