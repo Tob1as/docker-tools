@@ -86,7 +86,7 @@ jobs:
           builder: ${{ steps.buildx.outputs.name }}
           context: .
           file: ./azcopy.scratch.Dockerfile
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/ppc64le
+          platforms: linux/amd64,linux/arm64,linux/ppc64le
           push: true
           build-args: |
             BUILD_DATE=${{steps.script.outputs.build_date}}
