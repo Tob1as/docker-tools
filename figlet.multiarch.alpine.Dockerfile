@@ -28,7 +28,7 @@ RUN apk --no-cache add figlet figlet-doc \
         ours \
     ; \
     do \
-        wget -qO- http://ftp.figlet.org/pub/figlet/fonts/${fonts}.tar.gz | tar xvz -C /usr/share/figlet/fonts/ \
+        wget -qO- ftp://ftp.figlet.org/pub/figlet/fonts/${fonts}.tar.gz | tar xvz -C /usr/share/figlet/fonts/ \
         ; \
     done
 
