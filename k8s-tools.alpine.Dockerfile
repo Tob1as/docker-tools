@@ -29,7 +29,7 @@ RUN \
         #kubectl \
         #helm \
         #jq \
-        ##yq \
+        #yq-go \
         make \
     ; \
     echo ""

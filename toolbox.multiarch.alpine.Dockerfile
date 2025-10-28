@@ -55,6 +55,7 @@ RUN \
         tar \
         kubectl \
         nmap \
+        yq-go \
     ; \
     echo ">> Tools installed!"
 
