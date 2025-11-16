@@ -21,21 +21,38 @@ SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 WORKDIR /usr/src
 
 RUN echo ">> Install build packages ..." && \
-    apk add --no-cache \
-        build-base \
-        musl-dev \
-        wget \
-        perl \
-        coreutils \
+    apk add --no-cache --virtual .build-deps \
         linux-headers \
-        bash \
-        libtool \
+        musl-dev \
+        \
+        ca-certificates \
+        wget \
+        g++ \
+        make \
+        perl \
+        file \
+        tree \
+        \
         autoconf \
         automake \
+        libtool \
         \
-        geoip-dev geoip-static \
+        #geoip-dev geoip-static \
     && \
     mkdir -p ${OUTPUT_DIR}
+
+# https://github.com/maxmind/geoip-api-c
+RUN GEOIP1_VERSION=1.6.12 && \
+    echo ">> Download and compile: GeoIP V1 ${GEOIP1_VERSION} ..." && \
+    wget https://github.com/maxmind/geoip-api-c/archive/refs/tags/v${GEOIP1_VERSION}.tar.gz && \
+    tar xf v${GEOIP1_VERSION}.tar.gz && \
+    rm v${GEOIP1_VERSION}.tar.gz && \
+    cd geoip-api-c-${GEOIP1_VERSION} && \
+    ./bootstrap && \
+    ./configure --enable-static --disable-shared && \
+    make -j$(nproc) && \
+    make install && \
+    cd ..
 
 # https://github.com/PCRE2Project/pcre2
 RUN echo ">> Download: pcre2-${PCRE2_VERSION} ..." && \
