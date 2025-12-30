@@ -1,7 +1,7 @@
 # build: docker build --no-cache --progress=plain --target binary -t tobi312/tools:static-ssh-tools -f static-ssh-tools.Dockerfile .
 FROM alpine:latest AS builder
 
-ARG OPENSSH_VERSION=10.0p1
+ARG OPENSSH_VERSION=10.2p1
 ARG SSHPASS_VERSION=1.10
 ARG XXHASH_VERSION=0.8.3
 ARG RSYNC_VERSION=3.4.1

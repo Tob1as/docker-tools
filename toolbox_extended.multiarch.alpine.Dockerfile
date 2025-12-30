@@ -9,11 +9,11 @@ SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
         mariadb-client mariadb-backup \
-        postgresql15-client postgresql16-client postgresql17-client \
+        postgresql16-client postgresql17-client postgresql18-client \
         mongodb-tools \
         mosquitto-clients \
     ; \
-    #ln -snf /usr/libexec/postgresql15 /usr/libexec/postgresql ; \
+    #ln -snf /usr/libexec/postgresql18 /usr/libexec/postgresql ; \
     mariadb --version ; \
     psql --version ; \
     mongostat --version | grep mongostat ; \

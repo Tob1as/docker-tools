@@ -1,10 +1,10 @@
 # build: docker build --no-cache --progress=plain --target binary --build-arg NGINX_VERSION=1.29.1 -t tobi312/tools:static-nginx-unprivileged-nginxuser -f static-nginx.unprivileged-nginxuser.Dockerfile .
 FROM alpine:latest AS builder
 
-ARG PCRE2_VERSION=10.46
+ARG PCRE2_VERSION=10.47
 ARG ZLIB_VERSION=1.3.1
 ARG OPENSSL_VERSION=3.5.4
-ARG NGINX_VERSION=1.29.1
+ARG NGINX_VERSION=1.29.4
 
 ARG VCS_REF
 

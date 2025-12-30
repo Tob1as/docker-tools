@@ -27,7 +27,7 @@ RUN \
 
 WORKDIR /usr/src/c-mqtt-forwarder
 
-RUN cmake . ; \
+RUN cmake . -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ; \
     make ; \
     make install
 

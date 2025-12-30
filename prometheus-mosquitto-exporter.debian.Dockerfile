@@ -1,5 +1,5 @@
 # docker build --no-cache --progress=plain -t tobi312/tools:prometheus-mosquitto-exporter -f prometheus-mosquitto-exporter.debian.Dockerfile .
-FROM rust:1.82-slim-bookworm AS builder
+FROM rust:1.92-slim-trixie AS builder
 
 ARG VERSION=master
 ENV RUST_BACKTRACE=1
