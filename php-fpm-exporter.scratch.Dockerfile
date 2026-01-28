@@ -49,5 +49,9 @@ COPY --from=builder /go/bin/php-fpm_exporter /usr/local/bin/
 #    PHP_FPM_FIX_PROCESS_COUNT="false"
     
 EXPOSE     9253
+
+# user: nobody
+USER 65534
+
 ENTRYPOINT [ "php-fpm_exporter", "server" ]
 #CMD [ "--log.level=info", "--phpfpm.scrape-uri=tcp://127.0.0.1:9000/status",  "--web.listen-address=:9253", "--web.telemetry-path=/metrics", "--phpfpm.fix-process-count=false" ]
