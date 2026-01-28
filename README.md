@@ -23,6 +23,7 @@ Tools/Tags:
 * [`mqtt-board`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-board.yml)
 * [`mqtt-client`](https://github.com/Tob1as/docker-kubernetes-collection/blob/master/examples_docker-compose/mqtt-client.yml)
 * [`mqtt-forwarder`](#)
+* [`php-fpm-exporter`](#)
 * [`postgres-exporter`](#)
 * [`prometheus-mosquitto-exporter`](#)
 * [`prometheus-mqtt-transport`](#)
