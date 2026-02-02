@@ -8,7 +8,7 @@ SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 # Database Tools
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
-        mariadb-client mariadb-backup \
+        mariadb-client mariadb-backup mariadb-connector-c \
         postgresql16-client postgresql17-client postgresql18-client \
         mongodb-tools \
         mosquitto-clients \
