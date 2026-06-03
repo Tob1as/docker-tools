@@ -21,6 +21,7 @@ COPY --from=tobi312/tools:static-etcdctl /usr/local/bin/etcdctl .
 COPY --from=tobi312/tools:static-helm /usr/local/bin/helm .
 COPY --from=tobi312/tools:static-jq /usr/local/bin/jq .
 COPY --from=tobi312/tools:static-kubectl /usr/local/bin/kubectl .
+COPY --from=tobi312/tools:static-kustomize /usr/local/bin/kustomize .
 COPY --from=tobi312/tools:static-nginx /nginx/ ./nginx/
 COPY --from=tobi312/tools:static-ssh-tools /usr/local/bin/ ./ssh-tools/
 COPY --from=tobi312/tools:static-xq /usr/local/bin/xq .
