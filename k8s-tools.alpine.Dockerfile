@@ -28,6 +28,7 @@ RUN \
         #etcd-ctl \
         #kubectl \
         #helm \
+        #kustomize \
         #jq \
         #yq-go \
         make \
@@ -35,10 +36,12 @@ RUN \
     echo ""
 
 # https://hub.docker.com/r/tobi312/tools/tags?name=static
+#COPY --from=tobi312/tools:static-envsubst /usr/local/bin/envsubst /usr/local/bin/envsubst
 COPY --from=tobi312/tools:static-curl /usr/bin/curl /usr/local/bin/curl
 COPY --from=tobi312/tools:static-etcdctl /usr/local/bin/etcdctl /usr/local/bin/etcdctl
 COPY --from=tobi312/tools:static-kubectl /usr/local/bin/kubectl /usr/local/bin/kubectl
 COPY --from=tobi312/tools:static-helm /usr/local/bin/helm /usr/local/bin/helm
 COPY --from=tobi312/tools:static-helm /root/.local/share/helm/plugins /root/.local/share/helm/plugins
+COPY --from=tobi312/tools:static-kustomize /usr/local/bin/kustomize /usr/local/bin/kustomize
 COPY --from=tobi312/tools:static-jq /usr/local/bin/jq /usr/local/bin/jq
 COPY --from=tobi312/tools:static-yq /usr/local/bin/yq /usr/local/bin/yq
