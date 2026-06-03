@@ -41,6 +41,7 @@ RUN \
         openssh-client \
         rsync \
         autossh \
+        sshpass \
         ca-certificates \
         openssl \
         pwgen \
@@ -54,6 +55,8 @@ RUN \
         msmtp \
         tar \
         kubectl \
+        helm \
+        kustomize \
         nmap \
         yq-go \
     ; \
