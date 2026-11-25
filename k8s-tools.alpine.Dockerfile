@@ -32,6 +32,7 @@ RUN \
         #jq \
         #yq-go \
         make \
+        skopeo \
     ; \
     echo ""
 
