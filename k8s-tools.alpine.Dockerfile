@@ -1,5 +1,5 @@
 # docker build --no-cache --progress=plain -t tobi312/tools:k8s -f k8s-tools.alpine.Dockerfile .
-FROM alpine:latest AS production
+FROM docker.io/library/alpine:latest AS production
 
 SHELL ["/bin/ash", "-euxo", "pipefail", "-c"]
 
@@ -31,18 +31,24 @@ RUN \
         #kustomize \
         #jq \
         #yq-go \
+        #skopeo \
         make \
-        skopeo \
     ; \
     echo ""
 
 # https://hub.docker.com/r/tobi312/tools/tags?name=static
-#COPY --from=tobi312/tools:static-envsubst /usr/local/bin/envsubst /usr/local/bin/envsubst
-COPY --from=tobi312/tools:static-curl /usr/bin/curl /usr/local/bin/curl
-COPY --from=tobi312/tools:static-etcdctl /usr/local/bin/etcdctl /usr/local/bin/etcdctl
-COPY --from=tobi312/tools:static-kubectl /usr/local/bin/kubectl /usr/local/bin/kubectl
-COPY --from=tobi312/tools:static-helm /usr/local/bin/helm /usr/local/bin/helm
-COPY --from=tobi312/tools:static-helm /root/.local/share/helm/plugins /root/.local/share/helm/plugins
-COPY --from=tobi312/tools:static-kustomize /usr/local/bin/kustomize /usr/local/bin/kustomize
-COPY --from=tobi312/tools:static-jq /usr/local/bin/jq /usr/local/bin/jq
-COPY --from=tobi312/tools:static-yq /usr/local/bin/yq /usr/local/bin/yq
+#COPY --from=docker.io/tobi312/tools:static-envsubst /usr/local/bin/envsubst /usr/local/bin/envsubst
+COPY --from=docker.io/tobi312/tools:static-curl /usr/bin/curl /usr/local/bin/curl
+COPY --from=docker.io/tobi312/tools:static-etcdctl /usr/local/bin/etcdctl /usr/local/bin/etcdctl
+COPY --from=docker.io/tobi312/tools:static-kubectl /usr/local/bin/kubectl /usr/local/bin/kubectl
+COPY --from=docker.io/tobi312/tools:static-helm /usr/local/bin/helm /usr/local/bin/helm
+COPY --from=docker.io/tobi312/tools:static-helm /root/.local/share/helm/plugins /root/.local/share/helm/plugins
+COPY --from=docker.io/tobi312/tools:static-kustomize /usr/local/bin/kustomize /usr/local/bin/kustomize
+COPY --from=docker.io/tobi312/tools:static-jq /usr/local/bin/jq /usr/local/bin/jq
+COPY --from=docker.io/tobi312/tools:static-yq /usr/local/bin/yq /usr/local/bin/yq
+
+# other
+#ENV REGISTRY_AUTH_FILE=/run/containers/0/auth.json
+#ENV REGISTRY_AUTH_FILE=/tmp/auth.json
+COPY --from=ghcr.io/podman-container-tools-community/skopeo:latest /usr/bin/skopeo /usr/local/bin/skopeo
+COPY --from=ghcr.io/podman-container-tools-community/skopeo:latest /etc/containers/policy.json /etc/containers/policy.json
